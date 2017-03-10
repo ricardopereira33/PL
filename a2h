@@ -12,8 +12,10 @@ BEGIN {
   	elemento = "null";
 }
 
-/^<NOME|^<MORADA|^<LOCALIDADE|^<CODIGO_POSTAL/{
-	dados[$2] = $3;
+/^<NOME|^<MORADA|^<LOCALIDADE|^<CODIGO_POSTAL|^<MATRICULA|^<MES/{
+	if($2=="MES_EMISSAO")
+		dadosCliente["MES"] = $3;
+	else dadosCliente[$2] = $3;
 }
 
 /^<DATA_ENTRADA/{
@@ -52,8 +54,8 @@ END{
 	print head > "index.html";
 
 	PROCINFO["sorted_in"]= "@ind_str_desc";
-	for(i in dados){
-		printf(head2,i,dados[i]) > "index.html";	
+	for(i in dadosCliente){
+		printf(head2,i,dadosCliente[i]) > "index.html";	
 	}
 	print "\n<hr>\n" > "index.html";
 
