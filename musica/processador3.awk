@@ -5,16 +5,15 @@ BEGIN{
 	PROCINFO["sorted_in"]= "@ind_str_asc";
 }
 
-$1 == "singer"{
-	split($2,res,/\s?[;, ]/)
+/^singer/{
+	split($2,res,"[;,]")
 	for(i in res){
-		print "-"res[i]"-";
-		gsub(" ","",res[i]);
-		singers[res[i]]++;
+		str = fixSpace(res[i]);
+		singers[str]++;
 	}
 }
 
-$1 == "author"{
+/^author/{
 	split($2,r,/\s?[;,]/)
 	for(i in r){
 		gsub(" ","",r[i]);
@@ -23,5 +22,19 @@ $1 == "author"{
 }
 
 END{
-	
+	for(i in singers){
+		print "-" i "- " singers[i];
+	}
+
+	print "Total: " length(singers);
+}
+
+function fixSpace(str){
+	while(index(str," ") == 1){
+		sub(" ","",str)
+	}
+	while(substr(str,length(str),1)==" "){
+		str = substr(str,1,length(str)-1);
+	}
+	return str;
 }
