@@ -5,7 +5,6 @@ BEGIN {
 	head = "<h1 align=\"center\"> Extracto ViaVerde </h1>\n<hr><h2> Cliente </h2>\n";
 	head2 = "<h3> %s </h3> <p> %s </p>\n";
   	enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
-  	fmt = "<li><a> Dia %s: %d </a></li>\n\n";
   	entrada = "<li><a> %s </a></li>\n";
   	linha = "<p> %s </p>";
   	end = "</body> </html>";
