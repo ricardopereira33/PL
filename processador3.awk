@@ -6,7 +6,7 @@ BEGIN{
 }
 
 $1 == "singer"{
-	split($2,res,/ ?[;,]/)
+	split($2,res,/\s?[;,]/)
 	for(i in res){
 		gsub(" ","",res[i]);
 		singers[res[i]]++;
@@ -14,7 +14,7 @@ $1 == "singer"{
 }
 
 $1 == "author"{
-	split($2,r,/ ?[;,]/)
+	split($2,r,/\s?[;,]/)
 	for(i in r){
 		gsub(" ","",r[i]);
 		authors[r[i]]++;
@@ -22,8 +22,11 @@ $1 == "author"{
 }
 
 END{
-	for(s in singers) printf("%s -> %d.\n",s,singers[s]);
+	for(s in singers) 
+		printf("%s -> %d.\n",s,singers[s]);
+	
 	printf("Total de cantores: %d.\n",length(singers));
 	print "____________________________________________";
-	for(a in authors) printf("%s -> %d.\n",a,authors[a]);
+	
+	
 }
