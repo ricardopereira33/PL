@@ -21,7 +21,7 @@ BEGIN{
 /^singer/{
 	split($2,res,/[;,'(?)']/)
 	for(i in res){
-		singer = fixSpace(res[i]);
+		singer = fixSpaceAndChar(res[i]);
 		if(singer!="")
 			singers[singer]++;
 	}
@@ -30,18 +30,19 @@ BEGIN{
 /^author/{
 	split($2,r,/[;,'(?)']/)
 	for(i in r){
-		author = fixSpace(r[i]);
+		author = fixSpaceAndChar(r[i]);
 		if(author!=""){
 			authors[author]++;
 			if(authorTitle[author]!=null) 
-				authorTitle[author] = authorTitle[author]", " title;
-			else authorTitle[author] = title;
+				authorTitle[author] = authorTitle[author]", " fixSpaceAndChar(title);
+			else authorTitle[author] = fixSpaceAndChar(title);
 		}
 	}
 }
 
 /^title/{
-	title = $2;
+	split($2,tit,/['(?)']/);
+	title = tit[1];
 }
 
 END{
@@ -55,15 +56,20 @@ END{
 	print end > "index.html";
 }
 
-function fixSpace(str){
-	while(index(str," ") == 1){
-		sub(" ","",str)
-	}
-	while(substr(str,length(str),1)==" "){
-		str = substr(str,1,length(str)-1);
-	}
-	while(index(str,"\t") == 1 || substr(str,length(str),1)=="\t"){
-		sub("\t","",str)
+function fixSpaceAndChar(str){
+	fix = 0;
+	while(fix != 1){
+		if(index(str,"*") == 1)
+			sub("*","",str);
+		else if(index(str,"=") == 1)
+				sub("=","",str);
+		else if(index(str," ") == 1)
+				sub(" ","",str);
+		else if(substr(str,length(str),1)==" ")
+				str = substr(str,1,length(str)-1);
+		else if(index(str,"\t") == 1 || substr(str,length(str),1)=="\t")
+				sub("\t","",str);
+		else fix = 1;
 	}
 	return str;
 }
