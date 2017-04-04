@@ -16,6 +16,8 @@ BEGIN{
 	PROCINFO["sorted_in"]= "@ind_str_asc";
 	title = "null";
 	referencia = "<li><a href=\"%s\"> %s </a></li>\n\n";
+	system("mkdir -p output/exercicio3/");
+    local = "output/exercicio3/index.html";
 }
 
 /^singer/{
@@ -46,14 +48,14 @@ BEGIN{
 }
 
 END{
-	print enc > "index.html";
-	print head > "index.html";
+	print enc > local;
+	print head > local;
 
 	creatHTML("listaCantores");
 
 	creatHTML("listaAutores");
 
-	print end > "index.html";
+	print end > local;
 }
 
 function fixSpaceAndChar(str){
@@ -75,35 +77,35 @@ function fixSpaceAndChar(str){
 }
 
 function creatHTML(str){
-	print enc > str".html";
-	print head > str".html";
+	print enc > "output/exercicio3/"str".html";
+	print head > "output/exercicio3/"str".html";
 
 	titulo="null";
 	if(str=="listaCantores")
 		titulo = "Lista de Cantores";
 	else titulo = "Lista de Autores";
 		
-	printf(head2,titulo,"") > str".html";
+	printf(head2,titulo,"") > "output/exercicio3/"str".html";
 
 	if(str=="listaCantores"){
-		print table_start > str".html";
+		print table_start > "output/exercicio3/"str".html";
 		for(i in singers){
-			printf(table_entry,i,singers[i]) > str".html";	
+			printf(table_entry,i,singers[i]) > "output/exercicio3/"str".html";	
 		}
 	}
 	else{
-		print table_start2 > str".html";
+		print table_start2 > "output/exercicio3/"str".html";
 		for(i in authors){
-			printf(table_entry2,i,authors[i],authorTitle[i]) > str".html";	
+			printf(table_entry2,i,authors[i],authorTitle[i]) > "output/exercicio3/"str".html";	
 		}
 	}
-	print table_end > str".html";
+	print table_end > "output/exercicio3/"str".html";
 	
 	if(str=="listaCantores")
-		printf(linha,"Número total de Cantores: "length(singers)) > str".html";
-	else printf(linha,"Número total de Autores: "length(authors)) > str".html";
+		printf(linha,"Número total de Cantores: "length(singers)) > "output/exercicio3/"str".html";
+	else printf(linha,"Número total de Autores: "length(authors)) > "output/exercicio3/"str".html";
 
-	print end > str".html";
+	print end > "output/exercicio3/"str".html";
 
-	printf(referencia,str".html",titulo) > "index.html";
+	printf(referencia,str".html",titulo) > local;
 }

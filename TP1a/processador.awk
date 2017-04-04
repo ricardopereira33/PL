@@ -12,6 +12,8 @@ BEGIN {
     table_start = "<table style=\"width:30%\"><tr> <th>Dia</th><th>Número de Entradas</th> </tr>";
     table_entry= "<tr> <td> %s </td><td> %d </td> </tr>";
     table_end = "</table>";
+    system("mkdir -p output/exercicio1/");
+    local = "output/exercicio1/index.html";
 }
 
 /^<NOME|^<MORADA|^<LOCALIDADE|^<CODIGO_POSTAL|^<MATRICULA|^<MES/{
@@ -51,40 +53,40 @@ BEGIN {
 }
 
 END{
-	print enc > "index.html";
-	print head > "index.html";
+	print enc > local;
+	print head > local;
 
 	PROCINFO["sorted_in"]= "@ind_str_desc";
 	for(i in dadosCliente){
-		printf(head2,i,dadosCliente[i]) > "index.html";	
+		printf(head2,i,dadosCliente[i]) > local;	
 	}
-	print "\n<hr>\n" > "index.html";
+	print "\n<hr>\n" >local;
 
 	PROCINFO["sorted_in"]= "@ind_str_asc";
 
-	printf(head2,"Número de Entradas do Mês","") > "index.html";
-	print table_start > "index.html";
+	printf(head2,"Número de Entradas do Mês","") > local;
+	print table_start > local;
   	for (i in dias) 
-  		printf (table_entry,converteMonth(i),dias[i]) > "index.html";
-  	print table_end > "index.html";
+  		printf (table_entry,converteMonth(i),dias[i]) > local;
+  	print table_end > local;
 
-  	printf(head2,"Lista de Locais de Saída","") > "index.html";
+  	printf(head2,"Lista de Locais de Saída","") > local;
   	for(i in locais)
-  		printf (entrada,i) > "index.html";
+  		printf (entrada,i) > local;
 
-  	printf(head2,"Total Gasto","") > "index.html";
+  	printf(head2,"Total Gasto","") > local;
   	total = 0;
   	for(i in valor){
   		total += valor[i];
-  		printf(linha,"Mês "i ": " valor[i] " €") > "index.html";
+  		printf(linha,"Mês "i ": " valor[i] " €") > local;
   	}
-  	print "Valor Total : " total " €" > "index.html";
+  	print "Valor Total : " total " €" > local;
 
-  	printf(head2,"Total Gasto em Parques","") > "index.html";
+  	printf(head2,"Total Gasto em Parques","") > local;
   	for(i in parques)
-  		printf(linha,"Valor Total: " parques[i] " €") > "index.html";
+  		printf(linha,"Valor Total: " parques[i] " €") > local;
 
-  	print end > "index.html";
+  	print end > local;
 }
 
 function converteMonth(str){

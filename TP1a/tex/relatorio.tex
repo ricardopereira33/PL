@@ -1,0 +1,282 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[shortlabels]{enumerate}
+\usepackage{geometry}
+\usepackage{verbatim}
+ \geometry{
+ a4paper,
+ top=20mm,
+ }
+\usepackage[pdftex]{hyperref}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+\usepackage[portuges]{babel}
+\titleformat{\chapter}{\normalfont\huge}{\thechapter.}{10pt}{\huge\it}
+\begin{document}
+\begin{titlepage}
+	\centering
+	\includegraphics[width=0.3\textwidth]{./fotos_capa/UMINHO.jpg}\par\vspace{1cm}
+	{\huge\bfseries Processamento de Linguagens \par}
+	\vspace{0.5cm}
+	{\scshape\ MIEI - 3º ano - 2º semestre\par}
+	\vspace{0.1cm}
+	{\scshape\ Universidade do Minho\par}
+	\vspace{5cm}
+    {\scshape\LARGE Trabalho Prático nº1 \par}
+    \vspace{0.5cm}
+	{\scshape\LARGE GAWK \par}
+    \vspace{5cm}
+	\includegraphics[width=0.15\textwidth]{./fotos_capa/85.png}\hspace{2cm}
+	\includegraphics[width=0.15\textwidth]{./fotos_capa/33.jpg}\hspace{2cm}
+	\includegraphics[width=0.15\textwidth]{./fotos_capa/3.png}\par
+    Dinis Peixoto\hspace{1.5cm}Ricardo Pereira\hspace{1.4cm}Marcelo Lima\par
+	\noindent\textsc{A75353}\hspace{2.75cm}\textsc{A74185}\hspace{2.75cm}\textsc{A75210}
+
+	\vfill
+	{\large \today\par}
+\end{titlepage}
+
+
+\tableofcontents
+
+
+\chapter{Contextualização}
+Este relatório é o resultado do primeiro trabalho pŕatico proposto e elaborado na unidade curricular de Processamento de Linguagens. O trabalho teve por base a utilização do sistema de produção para filtragem de texto GAWK sobre um ficheiro input previamente fornecido, de modo a responder a uma série de alíneas de um dado enunciado. 
+Dos quatro enunciados apresentados, decidimos escolher dois deles, o primeiro designado \textbf{Processador de transações da Via Verde} e o terceiro designado \textbf{Autores musicais}. O primeiro apresentava como \emph{input} um ficheiro no formato \emph{XML} com o extrato mensal de um dado cliente, enquanto o segundo se tratava de um conjunto de ficheiros com extensão '.lyr', onde se encontravam as letras de várias canções famosas. Deste modo, o objetivo era desenvolver um Processador de Texto com o auxílio do \emph{GAWK}, para ler estes mesmos ficheiros e ao mesmo tempo filtra-los e transforma-los de modo a obter as informações pretendidas.
+
+\chapter{Processador de transações da Via Verde}
+\section{Enunciado}
+A Via Verde envia a cada um dos seus utentes um extracto mensal no formato \emph{XML} como se exemplifica no ficheiro anexo \emph{viaverde.xml}. Depois de analisar com cuidado o formato desse ficheiro anexo, pretende-se que desenvolva um Processador de Texto com o \emph{GAWK} para ler um extrato mensal da Via Verde e:
+
+\begin{enumerate}[a)] 
+    \item calcular o número de \emph{entradas} em cada dia do mês.
+    \item escrever a lista de locais de \emph{saída}.
+    \item calcular o total gasto no mês.
+    \item calcular o total gasto no mês apenas em \emph{parques}.
+\end{enumerate}
+
+\section{Descrição do problema}
+Tal como dito anteriormente, todo este trabalho se baseia na interpretação, filtragem e transformação de texto, estando este contido num ficheiro previamente fornecido. Neste caso trata-se de um ficheiro em formato \emph{XML}, onde nele se encontram registadas as informações de todas as transacções de um dado cliente no sistema de portagens Via Verde. Como tal, tratando-se de um ficheiro \emph{XML} é normal este conter bastante informação irrelevante aos olhos de pessoas normais, que apenas existe para este estar de acordo com a sua sintaxe, como por exemplo as \emph{tags} que demarcam os vários campos de informação. Deste modo, torna-se complicado e demorado obter a informação pretendida de um destes ficheiros, sem que para isso seja necessário recorrer a ferramentas como o \emph{GAWK}. Assim, toda a informação retirada e processada deste ficheiro com o objetivo de responder às diversas aĺíneas, será armazenada de forma organizada num ficheiro em formato \emph{HMTL} de modo a tornar a sua leitura bastante mais agradável.
+
+\subsection{a)}
+Nesta alínea \textbf{a}, o problema seria contabilizar o número de entradas em cada dia do mês. Para conseguir isto seria necessário ter em consideração cada data de uma entrada, interpretando-a de modo a ser-lhe possível associar um número de entradas.
+
+\subsection{b)}
+Por sua vez, na alínea \textbf{b}, o objetivo passaria por conseguir enumerar os diferentes locais de todo o documento, incluídos no parâmetro \emph{saída}. Para isso seria necessária a consulta deste parâmetro em todas as entradas do documento, adicionando-as a um conjunto de dados que não permitisse, de algum modo, a sua repetição.
+
+\subsection{c)}
+O caso da alínea \textbf{c} é ainda um pouco distinto dos anteriores, na medida que, neste caso, a barreira a ultrapassar seria associar todas as datas das entradas de modo a conseguir contabilizar assim o total gasto no mês (considerando também a diferença entre entradas registadas em Julho e Agosto), para todas as entradas.
+
+\subsection{d)}
+A alínea \textbf{d}, por fim, é relativamente parecida com a anterior, uma vez que o processo é, em parte idêntico, excepto na condição final, na qual é necessário ter em conta o parâmetro \emph{\textless TIPO\textgreater}, fazendo corresponder às únicas entradas cujo valor será contabilizado.
+
+\section{Decisões e Implementação}
+Para a resolução das várias alíneas, foi necessário estabelecer algumas medidas logo de início. Uma delas foi, alterar o valor do \textbf{FS}, para [\emph{\textless \textgreater}], permitindo que em cada linha do XML, os vários campos estejam repartidos pelos caracteres \emph{\textless} e \emph{\textgreater}, isto é, estejam repartidos exatamente no seguinte formato: \par
+\vspace{0.6cm}
+
+\begin{center}
+\$1 \emph{\textless CAMPO(\$2)\textgreater} CAMPO(\$3) \emph{\textless CAMPO(\$4)\textgreater}
+\end{center}
+
+
+\subsection{a)}
+Para esta alínea, apenas foi necessário em cada linha do XML, reconhecer a tag \emph{\textless DATA\_ENTREGA \textgreater}. Para tal, usamos esta expressão regular: \par
+
+\begin{center}
+\vspace{0.3cm}
+/\^\emph{\textless}DATA\_ENTRADA/ \par
+\vspace{0.3cm}
+\end{center}
+
+
+\noindent Esta expressão regular, encontra todas as expressões no ficheiro XML começadas por \emph{\textless DATA\_ENTRADA\textgreater}, e permite desta forma, recolher os dados contidos entre estas tags (corresponde ao campo \$3). O campo é uma data com o formato: \emph{dd-mm-aaaa}, e como tal, é necessário recolher parte do seu conteúdo. Para isso, usamos a função \emph{split}, que reparte a data nos três campos que possui (dia, mês e ano).
+Assim sendo, para armezanar os dados, recorremos a um array, onde os indíces deste correspondem a strings do formato: \emph{dd-mm}. Posto isto, para cada dia encontrado (indíce do array), incrementamos o seu valor, permitindo assim determinar quantas entradas ocorreram nesse dia. 
+
+\subsection{b)}
+Nesta alínea, seguimos o mesmo racíocinio da alínea anterior, isto é, para encontrar todos os locais de saída do ficheiro input é necessário reconhecer a tag \emph{\textless SAIDA \textgreater} usando, para tal, a seguinte expressão regular: \par 
+
+\begin{center}
+\vspace{0.3cm}
+/\^\emph{\textless} SAIDA/ \par
+\vspace{0.3cm}
+\end{center}
+
+
+\noindent Esta expressão regular, idêntica à anterior, permite também recolher os dados entre as tags (campo \$3). Desta forma, apenas nos limitamos a armazenar o local como índice de um array, incrementando este a cada local igual encontrado.
+
+\subsection{c)}
+Ao contrário das alíneas anteriores, esta requer uma análise mais cuidada. Para podermos obter os gastos do mês, e dentro deste, reparti-los pelo mês de ocorrência, é necessário ter uma variável \emph{mes} que armazena o mês de ocorrência. Esta operação ocorre dentro da condição com a expressão regular /\^\emph{\textless}DATA\_ENTRADA/, isto é, no momento em que contabilizamos os dias, actualizamos o mês de ocorrência, já que a tag possui a data completa, e a função \emph{split} nos dá o mês. No entanto, o ficheiro \emph{XML} possuí algumas falhas, nomeadamente, falta de dados entre a tag DATA\_ENTRADA, sendo por isso, necessário recorrer como segunda opção à tag DATA\_SAIDA. Para tal usamos a expressão regular e condição:
+
+\begin{center}
+\vspace{0.3cm}
+/\^\emph{\textless} DATA\_SAIDA/ \&\& mes=="null" \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent A condição de mes=="null", provém, quando na tag DATA\_ENTRADA não é encontrado dado nenhum, atribuindo assim o valor \emph{null} para que quando encontrada uma tag DATA\_SAIDA, usar a data contida como mês de ocorrência. \par
+\noindent Ao fim de obtermos o mês de ocorrência, passamos a recolha dos montantes dos respectivos meses. Para tal, recolhemos as tags IMPORTANCIA, com a seguinte expressão regular:
+
+\begin{center}
+\vspace{0.3cm}
+/\^\emph{\textless} IMPORTANCIA/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent Da mesma forma que nos casos anteriores, recolhemos o campo \$3, que nos dá o montante. No entanto, como os montantes são \emph{floats}, e estes diferenciam as casas decimais das unidades por um ".", é necessário substituir, o caracter ",", que é o delimitador que está presente no campo \$3. Para isto, usamos a função \emph{sub}, que substitui diretamente o caracter ",", pelo ".", e armazena o valor numa variável \emph{elemento}. Após esta correção, falta apenas armazenar os dados numa estrutura. Para tal, criamos um array, em que os índices são os meses que obtivemos logo de ínicio, e acumulamos os montantes no respectivo mês de ocorrência.
+
+\subsection{d)}
+Para conseguir-mos realizar esta alínea, aproveitamos grande parte do realizado já na alínea anterior, tendo em conta que o objetivo é praticamente o mesmo, com a simples adição de um condição de filtragem. A necessidade de filtrar as entradas por \emph{Parques} obrigou à utilização da expressão regular:
+
+\begin{center}
+\vspace{0.3cm}
+/\^\emph{\textless TIPO \textgreater} [Pp]arque/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent Desta forma, e com as entradas pretendidas filtradas, restava apenas realizar o somatório dos montantes gastos nas respectivas transações, o que é relativamente simples tendo em conta que o processo para obter os montantes já foi realizado na alínea anterior, correspondendo à variável \emph{elemento}.
+
+
+\section{Resultado conseguido}
+\subsection{Código-fonte}
+\verbatiminput{1/html.txt}
+
+
+\subsection{Visualização}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{1/a.png}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{1/b.png}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{1/c.png}
+\end{figure}
+
+
+\chapter{Autores Musicais}
+\section{Enunciado}
+Além da coleção de entrevista e fotografias do npMP, o Professor José Jõao Almeida tem uma diretoria (de nome musica, que é anexada em formato ZIP) com dezenas de ficheiros de extensão ’.lyr’ que contêm a letra de canções famosas precedidas de 2 ou mais campos de meta-informação (1 por linha) com o título da canção, o autor da letra (pode ser 1 ou mais pessoas), o cantor, etc. Uma linha em branco separa a meta-informação da letra. Podendo ainda ter em alguns casos um terceiro bloco (igualmente separado da letra por uma linha em branco) com a música escrita na notação midi. 
+Depois de analisar com cuidado o formato desse ficheiro anexo, pretende-se que desenvolva um Processador de Texto com o GAWK para ler todos os ficheiros ’.lyr’ da diretoria musica e:
+
+\begin{enumerate}[a)]
+    \item calcular o total de cantores e a lista com seus nomes.
+    \item calcular o total de canções do mesmo autor (mesmo que em alguns casos sejam várias pessoas considere como único).
+    \item escrever o nome de cada autor seguido do título das suas canções; se mais do que uma, separadas por uma vírgula.
+\end{enumerate}
+
+\section{Descrição do problema}
+Neste enunciado o procedimento já é um pouco diferente do anterior no que toca à forma de obter e processar a informação. Neste caso temos como \emph{input} toda uma diretoria na qual se encontram dezenas de ficheiros de extensão \emph{.lyr}. Cada um destes ficheiros, para além da letra de uma canção, contém várias outras informações sobre a mesma. Ao contrário do enunciado anterior, toda a informação que se encontra dentro destes ficheiros é considerada importante, uma vez que não existe qualquer tipo de código a organizar esta mesma informação. No entanto, contendo esta diretoria um elevado número de ficheiros, torna-se igualmente difícil retirar informação de todo o seu conjunto sem que para isso tenhamos de recorrer a uma ferramenta como o \emph{GAWK}. Tal como anteriormente, toda a informação necessária para responder às diversas alíneas será devidamente organizada num ficheiro em formato \emph{HTML}.
+
+\subsection{a)}
+Nesta alínea \textbf{a}, o objetivo seria conseguir o total de cantores diferentes e ainda uma lista destes. Assim, era necessário verificar, para todos os ficheiros \emph{.lyr}, o conteúdo do campo \emph{singer}, caso existisse, interpretando-o e ainda removendo eventuais diferenças entre valores semelhantes. Isto é, para casos em que, para diferentes músicas aparece \textbf{Cantor X} e \textbf{Cantor X (?)}, ou então em situações em que seria necessária a distinção entre os múltiplos cantores envolvidos na produção de uma música.
+
+\subsection{b)}
+Por sua vez, na alínea \textbf{b} era exigida a associação de cada música a um ou vários autores. Para tal, foi necessária a interpretação do campo \emph{author}, conseguindo um conjunto de diferentes autores. Posteriormente, era crucial fazer-se corresponder cada ficheiro de música a um autor, incrementando o número de músicas associado a este.
+
+\subsection{c)}
+Finalmente, na alínea \textbf{c} era pretendido listar o nome de todos os diferentes autores presentes assim como as músicas em que estes se inserem. Para esse fim, e tal como nos exercícios anteriormente realizados, foi necessário associar as músicas aos seus autores, agrupando-as assim, de maneira a ser possível futuramente imprimir toda a informação corretamente.
+
+\section{Decisões e Implementação}
+Como no 1º exercício, para a resolução das várias alíneas, foi necessário definir um conjunto de medidas logo de início. Uma destas foi alterar o valor do \textbf{FS} para o caracter ':', permitindo que em cada ficheiro \emph{.lyr}, os vários campos da meta-informação estejam repartidos pelo caractere ':', isto é, estejam repartidos exatamente no seguinte formato: \par
+\vspace{0.6cm}
+
+\begin{center}
+(Identificador)(\$1) : [ Valor1; Valor2; (...) ](\$2)
+\end{center}
+
+\subsection{a)}
+Para esta alínea apenas foi necessário reconhecer o campo da meta-informação \emph{singer}, em cada ficheiro '.lyr'. Para tal, foi usada a expressão regular: \par
+
+\begin{center}
+\vspace{0.3cm}
+/\^\ singer/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent Tendo encontrado este campo (Identificador), o campo \$2 irá conter os cantores pretendidos. Com isto, basta utilizar a função \emph{split}, repartindo o campo \$2, quando encontrar um dos seguintes caracteres/conjunto de caracteres: \textbf{';', ',' e '(?)'}. Para tal, utilizamos a seguinte expressão regular, como identificador dos diferentes separadores do campo \$2: \par
+
+\begin{center}
+\vspace{0.3cm}
+/[;,'(?)']/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent O resultado da função \emph{split} é um array com os vários cantores que um ficheiro \emph{.lyr} possui. Por fim, apenas armazenamos cada cantor num indíce diferente de um array, sendo que antes é aplicada a função \emph{fixSpaceAndChar}, para retirar caracteres indesejados que impossibilitavam a compatibilidade de cantores com o mesmo nome, isto é, \emph{Strings} que contenham espaços ou \emph{tabs}, que outra \emph{String} do mesmo cantor não contenha. 
+ 
+
+\subsection{b)}
+Nesta alínea seguimos o mesmo raciocínio que na alínea anterior. Assim sendo, em cada ficheiro \emph{.lyr}, encontramos o campo da meta-informação \emph{author}, usando a seguinte expressão regular: \par
+
+\begin{center}
+\vspace{0.3cm}
+/\^\ author/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent Posteriomente, e tal como na alínea anterior, para obter os autores de cada ficheiro utilizamos a função \emph{split}, com a seguinte expressão regular como identificador dos diferentes separadores do campo \$2:
+
+\begin{center}
+\vspace{0.3cm}
+/[;,'(?)']/ \par
+\vspace{0.3cm}
+\end{center}
+
+\noindent Obtendo assim um array com o(s) autor(es) intervenientes na respectiva música. De seguida, percorremos este array, aplicando a função \emph{fixSpaceAndChar}, tal como anteriormente. Restava apenas aumentar o valor correspondente ao índice do autor considerado, conseguindo assim um array com o total de canções respectivas a cada autor, e portanto, o resultado pretendido.
+
+\subsection{c)}
+Como o título é o primeiro campo da meta-informação, para podermos obter a lista dos títulos em que cada ator participou é necessário repartir tarefas. A primeira tarefa, é encontrar o campo \emph{title}, utilizando a seguinte expressão regular: \par
+
+\begin{center}
+\vspace{0.3cm}
+/\^\ title/ \par
+\vspace{0.3cm}
+\end{center}
+
+Depois é armarzenar o campo \$2 (corresponde ao título), numa varíavel chamada \emph{title}. Desta forma, quando processamos o campo \emph{author}, apenas precisamos de adicionar o título guardado na variavel \emph{title} como o valor num array, onde o indice é o autor. No entanto, temos que ter em atenção caso um autor tenha mais que uma participação em diferentes canções. Para isso, no momento de armazenar o título, verificamos se o autor em questão já possui algo ou não no array. Caso já possua, adicionamos ao conteúdo o caracter ',', e de seguida o título e caso não possua adicionamos apenas o título.
+
+\section{Resultado conseguido}
+\subsection{Código-fonte}
+Devido à extensão dos ficheiros (\emph{listaAutores.html} e \emph{listaCantores.html}), será demonstrado apenas um excerto dos mesmos.
+
+\subsubsection{index.html}
+\verbatiminput{2/index.txt}
+\vspace{0.5cm}
+\subsubsection{listaAutores.html}
+\verbatiminput{2/listaAutores.txt}
+\vspace{0.5cm}
+\subsubsection{listaCantores.html}
+\verbatiminput{2/listaCantores.txt}
+\vspace{0.5cm}
+
+\subsection{Visualização}
+Uma vez mais, devido à extensão do resultado produzido, serão apresentados apenas excertos do output conseguido.
+
+\subsubsection{index.html}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{2/1.png}
+\end{figure}
+\vspace{0.5cm}
+\subsubsection{listaAutores.html}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{2/2.png}
+\end{figure}
+\vspace{0.5cm}
+\subsubsection{listaCantores.html}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{2/3.png}
+\end{figure}
+
+\chapter{Apreciação crítica}
+Durante a realização deste trabalho prático, que foi o primeiro desta unidade curricular, várias foram as etapas que tivemos de passar para chegar ao resultado final.
+Apesar da simplicidade e do baixo nível de dificuldade que o trabalho revelou, este foi bastante importante, na medida em que a sua elaboração nos permitiu melhorar a nossa capacidade em escrever Expressões Regulares(ER), e apartir destas desenvolver Processadores de Linguagens Regulares, tendo em vista a filtragem e transformação de textos. Para isto, foi necessário aprender e aprofundar um pouco a linguagem do sistema de produção para filtragem de texto \emph{GAWK} e assim desenvolver as soluções necessárias para cada caso particular das diversas alíneas. 
+Apesar de no enunciado ser pedido a elaboração de apenas um dos quatro exercícios, achamos por bem realizar dois, uma vez que tivemos relativamente tempo para isso. Outra das funcionalidades que não era pedida no enunciado e no qual nós nos empenhamos em realizar foi a criação de ficheiros HTML com as respostas devidamente organizadas às diversas alíneas, de forma a ser mais cómoda e agradável a sua leitura.
+Concluindo, no geral estamos satisfeitos com o trabalho desenvolvido, tendo este se relevado bastante útil no aperfeiçoamento dos nossos conhecimentos no que toca ao tema em questão, à medida que os fomos colocando em prática.
+\end{document}
