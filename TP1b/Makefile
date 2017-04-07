@@ -1,9 +1,5 @@
-V=lyr2abc
+V=processador
 $V: $V.fl
 	flex $V.fl
-	cc lex.yy.c -o ex
+	cc lex.yy.c -o $V `pkg-config --cflags --libs glib-2.0`
 
-test: $V
-	cat musica/* | ./lyr2abc
-	-abcm2ps -n out.abc
-	ps2pdf Out.ps
