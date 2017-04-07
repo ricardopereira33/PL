@@ -1,0 +1,71 @@
+%option noyywrap
+%{
+#include <glib.h>
+#include <string.h>
+void changeLetters(char* letter);
+%}
+%x AUTHOR EDITOR
+%%
+author { 
+	BEGIN AUTHOR;
+}
+editor {
+	BEGIN EDITOR;
+}
+<AUTHOR>[\ \t]*=[\ \t]*[\"{] {
+	printf("author = {");
+}
+<AUTHOR>[\"}], {
+	printf("},");
+	BEGIN INITIAL;
+}
+<EDITOR>[\ \t]*=[\ \t]*[\"{] {
+	printf("editor = {");
+}
+<EDITOR>[\"}], {
+	printf("},");
+	BEGIN INITIAL;
+}
+<EDITOR>["{].*\n?[^=]*["}] {
+	printf("2-%s-2",yytext);
+	BEGIN INITIAL;
+}
+<*>\\'. {
+	changeLetters(yytext+2);
+} 
+%%
+
+void changeLetters(char* letter){
+	switch(letter[0]){
+		case 'a':	printf("á");
+					break;
+		case 'o':	printf("ó");
+					break;
+		case 'e':	printf("é");
+					break;
+		case 'i':	printf("í");
+					break;
+		case 'u':	printf("ú");
+					break;
+		case 'A':	printf("Á");
+					break;
+		case 'O':	printf("Ó");
+					break;
+		case 'E':	printf("É");
+					break;
+		case 'I':	printf("Í");
+					break;
+		case 'U':	printf("Ú");
+					break;
+	}
+}
+
+int main (int argc, char* argv[]) {
+
+    if(argc == 2)
+      yyin = fopen(argv[1], "r");
+
+    yylex();
+
+    return 0;
+}

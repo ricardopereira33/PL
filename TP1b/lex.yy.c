@@ -363,8 +363,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 10
-#define YY_END_OF_BUFFER 11
+#define YY_NUM_RULES 9
+#define YY_END_OF_BUFFER 10
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -372,33 +372,31 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[66] =
+static yyconst flex_int16_t yy_accept[50] =
     {   0,
-        0,    0,   11,   10,    7,   10,   10,   10,   10,   10,
-       10,   10,   10,    0,    1,    0,    2,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    4,
-        3,    5,    0,    0,    0,    0,    0,    0,    0,    6,
-        0,    0,    8,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    8,    0,    0,    0,    0,    9,    0,    0,
-        0,    0,    0,    0,    0
+        0,    0,    0,    0,    0,    0,   10,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    0,
+        0,    0,    0,    0,    4,    0,    3,    0,    0,    0,
+        0,    7,    6,    0,    0,    5,    6,    8,    0,    0,
+        0,    7,    0,    0,    0,    0,    1,    2,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
+        1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    3,    1,    1,    1,    1,    1,    1,    4,    1,
+        1,    2,    1,    4,    1,    1,    1,    1,    5,    1,
+        1,    1,    1,    6,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        7,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    5,    1,    6,    6,    6,    6,    6,    6,
-        6,    6,    6,    6,    6,    6,    6,    6,    6,    6,
-        6,    6,    6,    6,    6,    6,    6,    6,    6,    6,
-        1,    1,    1,    1,    1,    1,    7,    6,    8,    9,
+        1,    8,    1,    1,    1,    1,    9,    1,    1,   10,
 
-       10,    6,   11,   12,   13,    6,    6,   14,   15,   16,
-       17,    6,    6,   18,   19,   20,   21,   22,   23,    6,
-       24,    6,    1,    1,    1,    1,    1,    1,    1,    1,
+       11,    1,    1,   12,   13,    1,    1,    1,    1,    1,
+       14,    1,    1,   15,    1,   16,   17,    1,    1,    1,
+        1,    1,   18,    1,   19,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -415,69 +413,64 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[25] =
+static yyconst flex_int32_t yy_meta[20] =
     {   0,
-        1,    2,    3,    1,    1,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4
+        1,    2,    3,    2,    1,    1,    4,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    2,    1
     } ;
 
-static yyconst flex_int16_t yy_base[71] =
+static yyconst flex_int16_t yy_base[56] =
     {   0,
-        0,   22,  100,  101,  101,   32,    0,    1,   14,   95,
-       86,   80,   12,   82,  101,   85,  101,   84,   77,   71,
-       82,    0,   66,   78,   68,    5,   84,   72,   64,  101,
-      101,  101,   81,   69,   79,   78,   61,   76,   64,  101,
-       58,   40,    0,   42,   39,   43,   54,   46,   45,   24,
-       29,   26,    0,   36,   27,   32,   29,   28,   59,   29,
-       25,    4,    8,    3,  101,   64,   66,    1,   70,   74
+        0,    4,   14,    0,   32,    0,   54,  101,   44,   31,
+       37,    0,   40,   43,    3,   49,   42,   66,   37,    0,
+       26,   27,   12,   35,  101,    0,  101,   18,   33,    0,
+       13,    0,    0,    0,    0,  101,  101,  101,   19,   14,
+       19,   22,   15,   14,   12,    9,  101,  101,  101,   85,
+        2,   89,    1,   93,   97
     } ;
 
-static yyconst flex_int16_t yy_def[71] =
+static yyconst flex_int16_t yy_def[56] =
     {   0,
-       66,   66,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   67,   65,   65,   65,   65,
-       65,   65,   68,   65,   65,   65,   69,   67,   65,   65,
-       65,   65,   68,   65,   65,   65,   70,   70,   69,   65,
-       65,   65,   65,   65,    0,   65,   65,   65,   65,   65
+       50,   50,   50,    3,    3,    5,   49,   49,   49,   49,
+       49,   49,   49,   51,   49,   52,   53,   52,   49,   54,
+       49,   49,   49,   51,   49,   24,   49,   49,   53,   18,
+       55,   18,   18,   18,   29,   49,   49,   49,   49,   49,
+       55,   55,   49,   49,   49,   49,   49,   49,    0,   49,
+       49,   49,   49,   49,   49
     } ;
 
-static yyconst flex_int16_t yy_nxt[126] =
+static yyconst flex_int16_t yy_nxt[121] =
     {   0,
-       65,    5,   36,    6,   53,   43,   19,    7,    8,   37,
-       43,   41,   64,   21,    9,   10,   20,   22,   11,   12,
-       23,   42,   13,    5,   28,    6,   24,   43,   29,    7,
-        8,   43,   58,   58,   43,   63,    9,   10,   43,   62,
-       11,   12,   61,   60,   13,   14,   15,   36,   47,   16,
-       17,   56,   55,   18,   57,   54,   57,   57,   58,   57,
-       52,   57,   57,   58,    4,    4,    4,    4,   48,   48,
-       59,   51,   59,   59,   57,   50,   57,   57,   43,   49,
-       47,   36,   46,   43,   45,   44,   43,   40,   39,   38,
-       35,   34,   33,   32,   31,   30,   27,   26,   25,   65,
+       49,   23,   36,   27,   28,   49,   24,    9,   10,   29,
+       11,    9,   10,   23,   11,   12,   42,   13,   24,   28,
+       14,    9,   42,   48,   29,   42,   47,   46,   45,   44,
+       43,   42,   13,   15,   35,   16,   26,   42,   17,   40,
+       42,   39,   37,   35,   26,   25,   22,   21,   20,   18,
+       19,   31,   32,   49,   33,   34,   49,   49,   49,   49,
+       49,   49,   49,   49,   49,   49,   49,   32,   31,   32,
+       49,   49,   34,   49,   49,   49,   49,   49,   49,   49,
+       49,   49,   49,   49,   32,    8,    8,    8,    8,   30,
+       30,   30,   30,   38,   38,   49,   38,   41,   41,   41,
 
-        3,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65
+        7,   49,   49,   49,   49,   49,   49,   49,   49,   49,
+       49,   49,   49,   49,   49,   49,   49,   49,   49,   49
     } ;
 
-static yyconst flex_int16_t yy_chk[126] =
+static yyconst flex_int16_t yy_chk[121] =
     {   0,
-        0,    1,   22,    1,   68,   64,    7,    1,    1,   22,
-       63,   26,   62,    8,    1,    1,    7,    8,    1,    1,
-        9,   26,    1,    2,   13,    2,    9,   61,   13,    2,
-        2,   60,   58,   57,   56,   55,    2,    2,   54,   52,
-        2,    2,   51,   50,    2,    6,    6,   49,   48,    6,
-        6,   46,   45,    6,   47,   44,   47,   47,   47,   59,
-       42,   59,   59,   59,   66,   66,   66,   66,   67,   67,
-       69,   41,   69,   69,   70,   39,   70,   70,   38,   37,
-       36,   35,   34,   33,   29,   28,   27,   25,   24,   23,
-       21,   20,   19,   18,   16,   14,   12,   11,   10,    3,
+        0,   12,   53,   51,   15,    0,   12,    1,    1,   15,
+        1,    2,    2,   23,    2,    3,   31,    3,   23,   28,
+        3,    3,   41,   46,   28,   42,   45,   44,   43,   40,
+       39,   31,    3,    5,   29,    5,   24,   41,    5,   22,
+       42,   21,   19,   17,   14,   13,   11,   10,    9,    5,
+        5,   16,   16,    7,   16,   16,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,   16,   18,   18,
+        0,    0,   18,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,   18,   50,   50,   50,   50,   52,
+       52,   52,   52,   54,   54,    0,   54,   55,   55,   55,
 
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65
+       49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
+       49,   49,   49,   49,   49,   49,   49,   49,   49,   49
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -494,21 +487,17 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "processador.fl"
-#line 3 "processador.fl"
+#line 1 "processador2.fl"
+#line 3 "processador2.fl"
 #include <glib.h>
 #include <string.h>
-GHashTable* verbos;
-GTree* verbosOrdenada;
-FILE* start;
-FILE* text;
-FILE* table;
-gboolean finder(gpointer key, gpointer value, gpointer user_data);
-void init(FILE* start, FILE* text, FILE* table);
-void insertVerb(char* yytext, int index );
-#line 510 "lex.yy.c"
+void findLetters(char* letter);
+
+#line 497 "lex.yy.c"
 
 #define INITIAL 0
+#define AUTHOR 1
+#define EDITOR 2
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -688,17 +677,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 14 "processador.fl"
+#line 8 "processador2.fl"
 
-  start = fopen("processadorIngles.html", "w");
-  table = fopen("table.html", "w");
-  /*INICIO*/
-  init(start,text,table);
-  
-  char verbo[32];
-  gint* indice= g_new(gint,1);
-  (*indice)=1;
-#line 702 "lex.yy.c"
+#line 683 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -751,7 +732,7 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 66 )
+				if ( yy_current_state >= 50 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -783,75 +764,73 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 23 "processador.fl"
+#line 9 "processador2.fl"
 { 
-	fprintf(text,"%s"," am"); 
+	BEGIN AUTHOR;
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 26 "processador.fl"
-{ 
-	fprintf(text,"%s"," is"); 
+#line 12 "processador2.fl"
+{
+	BEGIN EDITOR;
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 29 "processador.fl"
-{ 
-	fprintf(text,"%s"," are"); 
+#line 15 "processador2.fl"
+{
+	printf("author = {");
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 32 "processador.fl"
-{ 
-	fprintf(text,"%s"," will"); 
+#line 18 "processador2.fl"
+{
+	printf("},");
+	BEGIN INITIAL;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 35 "processador.fl"
-{ 
-	fprintf(text,"%s"," have"); 
+#line 22 "processador2.fl"
+{
+	printf("editor = {");
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 38 "processador.fl"
+#line 25 "processador2.fl"
 {
-	fprintf(text,"%s"," not");
+	printf("},");
+	BEGIN INITIAL;
 }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 41 "processador.fl"
+#line 29 "processador2.fl"
 {
-	fprintf(text,"%s","<br>");
+	printf("2-%s-2",yytext);
+	BEGIN INITIAL;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 44 "processador.fl"
+#line 33 "processador2.fl"
 {
-	insertVerb(yytext,1);
-}
+	findLetters(yytext+2);
+} 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 47 "processador.fl"
-{
-	insertVerb(yytext,2);
-}
-	YY_BREAK
-case 10:
-YY_RULE_SETUP
-#line 50 "processador.fl"
+#line 36 "processador2.fl"
 ECHO;
 	YY_BREAK
-#line 854 "lex.yy.c"
+#line 831 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
+case YY_STATE_EOF(AUTHOR):
+case YY_STATE_EOF(EDITOR):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1142,7 +1121,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 66 )
+			if ( yy_current_state >= 50 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1170,11 +1149,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 66 )
+		if ( yy_current_state >= 50 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 65);
+	yy_is_jam = (yy_current_state == 49);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1847,110 +1826,42 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "processador.fl"
+#line 36 "processador2.fl"
 
 
 
-void insertVerb(char* yytext, int index ){
-	char* value = (char*)malloc(sizeof(char) * 32);
-	int i=0;
-	char* token = strtok(yytext," ");
-	while(token!=NULL){
-		token = strtok(NULL," ");
-		if(token!=NULL && i<index)strcpy(value,token);
-		else break;
-		i++;
+void findLetters(char* letter){
+	switch(letter[0]){
+		case 'a':	printf("á");
+					break;
+		case 'o':	printf("ó");
+					break;
+		case 'e':	printf("é");
+					break;
+		case 'i':	printf("í");
+					break;
+		case 'u':	printf("ú");
+					break;
+		case 'A':	printf("Á");
+					break;
+		case 'O':	printf("Ó");
+					break;
+		case 'E':	printf("É");
+					break;
+		case 'I':	printf("Í");
+					break;
+		case 'U':	printf("Ú");
+					break;
 	}
-	printf("%s",value);
-	value[strlen(value)]=0;
 
-	int *aux = (int *) g_hash_table_lookup(verbos,value);
- 	if(aux == NULL && strlen(value)>1){
- 		gint* ind= g_new(gint,1);	
-		(*ind)=1;
-		g_hash_table_insert(verbos,value,ind); 
- 	}
-	else if(strlen(value)>1){
-		gint* ind= g_new(gint,1);
-		gpointer gp = g_hash_table_find(verbos, (GHRFunc)finder,value);	
-		gint num = *(gint*)gp;
-		(*ind)= num+1;
-		g_hash_table_replace(verbos,value,ind);
-	}
-}
-
-void init(FILE* start, FILE* text, FILE* table){
-	char* enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
-  	char* head = "<h1 align=\"center\"> Processador Inglês </h1>\n<hr>";
-  	char* referencia = "<li><a href=\"%s\"> %s </a></li>\n\n";
-
-  	fprintf(start,"%s",enc);
-  	fprintf(text,"%s",enc);
-  	fprintf(table,"%s",enc);
-
-  	fprintf(start,"%s",head);
-  	fprintf(text,"%s<p>",head);
-  	fprintf(table,"%s",head);
-
-  	fprintf(start,referencia,"text.html","Texto expandido");
-  	fprintf(start,referencia,"table.html","Tabela dos Verbos");
-}
-
-void end(FILE* start, FILE* text, FILE* table){
-  	fprintf(start,"%s","</body> </html>");
-  	fprintf(text,"</p>%s","</body> </html>");
-  	fprintf(table,"%s","</body> </html>");
-}
-
-gint compare(gconstpointer aPtr, gconstpointer bPtr){
-	gint a,b;
-
-	a = *(gint *)aPtr;  
-  	b = *(gint *)bPtr; 
-
-	if(a<b) return 1;
-	return -1;
-}
-
-gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
-	char* table_entry = "<tr> <td> %s </td><td> %d </td> </tr>";
-	fprintf(table, table_entry, value, *(gint*)key);
-
-	return FALSE;
-}
-
-gboolean finder(gpointer key, gpointer value, gpointer user_data){
-	return strcmp(key,user_data)==0;
-}
-
-void inserir(gpointer key, gpointer value, gpointer user_data){
-	gint* aux = (gint*)value;
-	char* aux2 = (char*)key;
-
-	g_tree_insert(verbosOrdenada, aux, aux2);
 }
 
 int main (int argc, char* argv[]) {
-	verbos = g_hash_table_new(g_str_hash, g_int_equal);
-	verbosOrdenada = g_tree_new(compare);
 
     if(argc == 2)
       yyin = fopen(argv[1], "r");
 
-    yyout = fopen("text.html", "w");
-    text = yyout;
     yylex();
 
-    g_hash_table_foreach(verbos, (GHFunc)inserir, NULL);
-
-    /*Lista ordenada pelo número de entradas*/
-    char* table_start = "<table style=\"width:30%\"><tr> <th>Verbo</th><th>Número de Entradas</th> </tr>";
-    fprintf(table,"%s",table_start);
-    g_tree_foreach(verbosOrdenada, (GTraverseFunc)iterator, NULL);
- 	char* table_end = "</table>";
- 	fprintf(table,"%s",table_end);
-
-    /*FIM*/
-    end(start,text,table);
     return 0;
 }

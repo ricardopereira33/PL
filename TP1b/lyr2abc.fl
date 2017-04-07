@@ -15,7 +15,7 @@ title:.* {
 	BEGIN INITIAL;
 	printf("xau\n");
 }
-	/*<*>\<abc\> { 
+/*<*>\<abc\> { 
 	BEGIN ABC; 
 }
 <POEMA>.|\n { }
@@ -31,7 +31,7 @@ title:.* {
 }
 <ABC>.|\n { 
 	fprintf(abc, "%s", yytext);
-}*/
+}
 %%
 int main (int argc, char* argv[]) {
     if(argc == 2)
