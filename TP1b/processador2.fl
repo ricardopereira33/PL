@@ -2,10 +2,18 @@
 %{
 #include <glib.h>
 #include <string.h>
-void changeLetters(char* letter);
+char* changeLetters(char* letter, char c, int val);
+void transfereChar(char* text, char* letter);
+void rewritten(char* text);
+GHashTable* actores;
+char text[64];
+char* reverseText;
+int indice=0;
 %}
 %x AUTHOR EDITOR
+L       [a-zA-Z.úàáâéíçãì]
 %%
+	char* letter;
 author { 
 	BEGIN AUTHOR;
 }
@@ -16,8 +24,23 @@ editor {
 	printf("author = {");
 }
 <AUTHOR>[\"}], {
+	rewritten(text);
+	indice=0;
+	text[0]=0;
 	printf("},");
 	BEGIN INITIAL;
+}
+<AUTHOR>and\  {
+	rewritten(text);
+	indice=0;
+	text[0]=0;
+	printf("%s",yytext);
+}
+<AUTHOR>{L}* {
+	strcpy(text+indice,yytext);
+	indice+=strlen(yytext);
+	text[indice++]=' ';
+	text[indice]=0;
 }
 <EDITOR>[\ \t]*=[\ \t]*[\"{] {
 	printf("editor = {");
@@ -27,37 +50,106 @@ editor {
 	BEGIN INITIAL;
 }
 <EDITOR>["{].*\n?[^=]*["}] {
-	printf("2-%s-2",yytext);
 	BEGIN INITIAL;
 }
-<*>\\'. {
-	changeLetters(yytext+2);
-} 
+<*>\\['~^`]. {
+	letter=changeLetters(yytext+2,(yytext+1)[0],0);
+	transfereChar(text,letter);
+}
+<*>\\´. {
+	letter=changeLetters(yytext+3,(yytext+1)[0],1);
+	transfereChar(text,letter);
+}  
 %%
 
-void changeLetters(char* letter){
+int checkChar(char* text, char c){
+    int len = strlen(text);
+    int i;
+    for(i = 0; i < len; i++){
+      if(text[i] == c){
+       	return 1;
+      }
+   }
+   return 0;
+}
+
+void rewritten(char* text){
+	char** lista = (char**) malloc(sizeof(char*)*8);
+	char* res = (char*) malloc(sizeof(char)*strlen(text));
+	char* fim;
+	int i=0;
+
+	char* token = strtok(text," ");
+	while(token!=NULL){
+		fim = (char*) malloc(sizeof(char)*32);
+		strcpy(fim,token);
+		lista[i]=fim;
+		i++;
+		token = strtok(NULL," ");
+	}
+	lista[i]=NULL;
+	
+	strcpy(res,lista[i-1]);
+	strcpy(res+strlen(res),", ");
+
+	for(int j=0; j< i-1; j++){
+		if(checkChar(lista[j],'.')){
+			strcpy(res+strlen(res),lista[j]);
+			strcpy(res+strlen(res)," ");
+		}
+		else{
+			char buf[32];
+			sprintf(buf,"%c. ",lista[j][0]);
+			strcpy(res+strlen(res),buf);
+		}	
+	}
+	printf("%s",res); 
+}
+
+void transfereChar(char* text, char* letter){
+	text[indice-1]=letter[0];
+	text[indice++]=letter[1];
+	text[indice]=0;
+}
+
+char* changeLetters(char* letter,char c, int val){
 	switch(letter[0]){
-		case 'a':	printf("á");
+		case 'a':	if(c == '\'' || val == 1) return("á");
+					else if(c == '~') return ("ã");
+					else if(c == '`') return ("à");
 					break;
-		case 'o':	printf("ó");
+		case 'o':	if(c == '\'' ||  val == 1) return ("ó");
+					else if(c == '~') return ("õ");
+					else if(c == '`') return ("ò");
 					break;
-		case 'e':	printf("é");
+		case 'e':	if(c == '\'' ||  val == 1) return ("é");
+					else if(c == '^') return ("ê");
 					break;
-		case 'i':	printf("í");
+		case 'i':	if(c == '\'' ||  val == 1) return ("í");
+					else if(c == '`') return ("ì");
 					break;
-		case 'u':	printf("ú");
+		case 'u':	if(c == '\'' ||  val == 1) return ("ú");
+					else if(c == '`') return ("ù");
 					break;
-		case 'A':	printf("Á");
+		case 'A':	if(c == '\'' ||  val == 1) return ("Á");
+					else if(c == '~') return ("Ã");
+					else if(c == '`') return ("À");
 					break;
-		case 'O':	printf("Ó");
+		case 'O':	if(c == '\'' ||  val == 1) return ("Ó");
+					else if(c == '~') return ("Õ");
+					else if(c == '`') return ("Ò");
 					break;
-		case 'E':	printf("É");
+		case 'E':	if(c == '\'' ||  val == 1) return ("É");
+					else if(c == '^') return ("Ê");
 					break;
-		case 'I':	printf("Í");
+		case 'I':	if(c == '\'' ||  val == 1) return ("Í");
+					else if(c == '`') return ("Ì");
 					break;
-		case 'U':	printf("Ú");
+		case 'U':	if(c == '\'' ||  val == 1) return ("Ú");
+					else if(c == '`') return ("Ù");
 					break;
 	}
+	return letter;
 }
 
 int main (int argc, char* argv[]) {
