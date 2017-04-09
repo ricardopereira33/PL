@@ -416,7 +416,7 @@ static yyconst flex_int32_t yy_ec[256] =
 
 static yyconst flex_int32_t yy_meta[25] =
     {   0,
-        1,    1,    2,    1,    1,    1,    1,    3,    4,    1,
+        1,    1,    2,    1,    1,    1,    3,    3,    4,    1,
         3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
         1,    1,    1,    1
     } ;
@@ -447,7 +447,7 @@ static yyconst flex_int16_t yy_nxt[269] =
     {   0,
        59,   27,   30,   27,   27,   59,   27,   59,   28,    9,
        10,   28,   11,    9,   10,   59,   11,    8,   12,    8,
-       13,   14,    8,    8,   15,   16,    9,   17,   15,   15,
+       13,   14,    8,   15,   15,   16,    9,   17,   15,   15,
        15,   15,   15,   15,   15,   15,   15,    8,   14,    8,
         8,   18,   50,   18,   19,   23,   58,   57,   20,    9,
        34,   27,   34,   27,   50,   50,   56,   35,   28,   50,
@@ -527,15 +527,22 @@ char *yytext;
 #line 3 "processador2.fl"
 #include <glib.h>
 #include <string.h>
+
 char* changeLetters(char* letter, char c, int val);
 void transfereChar(char* text, char* letter);
 void rewritten(char* text);
-GHashTable* actores;
-char text[64];
-char* reverseText;
-int indice=0;
+void addElement(char* text);
+void writeFile();
+void rest();
 
-#line 539 "lex.yy.c"
+GTree* actores;
+char text[64];
+char* reverseText, *actor, *entry;
+int indice=0, find=0;
+FILE* file;
+
+
+#line 546 "lex.yy.c"
 
 #define INITIAL 0
 #define AUTHOR 1
@@ -719,10 +726,14 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 15 "processador2.fl"
+#line 24 "processador2.fl"
 
 	char* letter;
-#line 726 "lex.yy.c"
+	file = fopen("graph.dot","w");
+	char* start="graph {\n"; 
+	fprintf(file,"%s",start);
+
+#line 737 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -807,45 +818,52 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 "processador2.fl"
+#line 30 "processador2.fl"
 { 
 	BEGIN AUTHOR;
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 20 "processador2.fl"
+#line 33 "processador2.fl"
 {
 	BEGIN EDITOR;
 }
 	YY_BREAK
+/*CONTEXTO DO AUTOR*/
 case 3:
 YY_RULE_SETUP
-#line 23 "processador2.fl"
+#line 38 "processador2.fl"
 {
 	printf("author = {");
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 26 "processador2.fl"
+#line 41 "processador2.fl"
 {
+	if(find==1) writeFile();
 	rewritten(text);
 	indice=0;
 	text[0]=0;
+	find=0;
+	rest();
 	printf("},");
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 "processador2.fl"
+#line 51 "processador2.fl"
 {}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 34 "processador2.fl"
+#line 52 "processador2.fl"
 {
+	text[indice-1]=0;
+	if(strcmp(actor,text)==0) find=1;
+	else addElement(text);
 	rewritten(text);
 	indice=0;
 	text[0]=0;
@@ -854,7 +872,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 40 "processador2.fl"
+#line 61 "processador2.fl"
 {
 	strcpy(text+indice,yytext);
 	indice+=strlen(yytext);
@@ -862,16 +880,17 @@ YY_RULE_SETUP
 	text[indice]=0;
 }
 	YY_BREAK
+/*CONTEXTO DO EDITOR*/
 case 8:
 YY_RULE_SETUP
-#line 46 "processador2.fl"
+#line 69 "processador2.fl"
 {
 	printf("editor = {");
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 49 "processador2.fl"
+#line 72 "processador2.fl"
 {
 	printf("},");
 	BEGIN INITIAL;
@@ -880,14 +899,15 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 53 "processador2.fl"
+#line 76 "processador2.fl"
 {
 	BEGIN INITIAL;
 }
 	YY_BREAK
+/*CONTEXTO GERAL*/
 case 11:
 YY_RULE_SETUP
-#line 56 "processador2.fl"
+#line 81 "processador2.fl"
 {
 	letter=changeLetters(yytext+2,(yytext+1)[0],0);
 	transfereChar(text,letter);
@@ -895,7 +915,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 60 "processador2.fl"
+#line 85 "processador2.fl"
 {
 	letter=changeLetters(yytext+3,(yytext+1)[0],1);
 	transfereChar(text,letter);
@@ -903,10 +923,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 64 "processador2.fl"
+#line 89 "processador2.fl"
 ECHO;
 	YY_BREAK
-#line 910 "lex.yy.c"
+#line 930 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(AUTHOR):
 case YY_STATE_EOF(EDITOR):
@@ -1905,8 +1925,28 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "processador2.fl"
+#line 89 "processador2.fl"
 
+
+
+/*FUNCOES*/
+
+void addElement(char* text){
+	char* element = (char*) malloc(sizeof(char)*32);
+	strcpy(element,text);
+	g_tree_insert(actores, element,element);	
+}
+
+gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
+	char* entry="\"%s\" -- \"%s\";\n";
+	fprintf(file, entry, actor, (char *)key);
+
+	return FALSE;
+}
+
+void writeFile(){
+	g_tree_foreach(actores, (GTraverseFunc)iterator, NULL);
+}
 
 
 int checkChar(char* text, char c){
@@ -1925,6 +1965,8 @@ void rewritten(char* text){
 	char* res = (char*) malloc(sizeof(char)*strlen(text));
 	char* fim;
 	int i=0;
+	int side=0;
+	int limit,j;
 
 	char* token = strtok(text," ");
 	while(token!=NULL){
@@ -1936,15 +1978,26 @@ void rewritten(char* text){
 	}
 	lista[i]=NULL;
 	
-	strcpy(res,lista[i-1]);
-	strcpy(res+strlen(res),", ");
 
-	for(int j=0; j< i-1; j++){
+	if(!(checkChar(lista[0],','))){
+		strcpy(res,lista[i-1]);
+		strcpy(res+strlen(res),", ");
+		limit = i-1;
+		j=0;
+	}
+	else {
+		strcpy(res,lista[0]);
+		strcpy(res+strlen(res)," ");
+		limit = i; 
+		j=1;
+	}
+
+	for(; j<limit; j++){
 		if(checkChar(lista[j],'.')){
-			strcpy(res+strlen(res),lista[j]);
-			strcpy(res+strlen(res)," ");
+				strcpy(res+strlen(res),lista[j]);
+				strcpy(res+strlen(res)," ");
 		}
-		else{
+		else {
 			char buf[32];
 			sprintf(buf,"%c. ",lista[j][0]);
 			strcpy(res+strlen(res),buf);
@@ -1999,12 +2052,35 @@ char* changeLetters(char* letter,char c, int val){
 	return letter;
 }
 
-int main (int argc, char* argv[]) {
+gint compare(gconstpointer aPtr, gconstpointer bPtr){
+	char* a, *b;
 
-    if(argc == 2)
+	a = (char *)aPtr;  
+  	b = (char *)bPtr; 
+
+	if(strcmp(a,b)==0) return 0;
+	else if(strcmp(a,b)>0) return -1;
+	return 1;
+}
+
+void rest(){
+	g_tree_destroy(actores);
+	actores = g_tree_new(compare);
+}
+
+int main (int argc, char* argv[]) {
+	actores = g_tree_new(compare);
+
+	actor = argv[2];
+
+    if(argc == 3)
       yyin = fopen(argv[1], "r");
 
     yylex();
 
+    char* end = "}";
+ 	fprintf(file,"%s",end);
+
+ 	system("dotty graph.dot");
     return 0;
 }

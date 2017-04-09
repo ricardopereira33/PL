@@ -2,36 +2,57 @@
 %{
 #include <glib.h>
 #include <string.h>
+
 char* changeLetters(char* letter, char c, int val);
 void transfereChar(char* text, char* letter);
 void rewritten(char* text);
-GHashTable* actores;
+void addElement(char* text);
+void writeFile();
+void rest();
+
+GTree* actores;
 char text[64];
-char* reverseText;
-int indice=0;
+char* reverseText, *actor, *entry;
+int indice=0, find=0;
+FILE* file;
+
 %}
 %x AUTHOR EDITOR
-L       [a-zA-Z.úàáâéíçãì]
+
+L       [a-zA-Z.,úàáâéíçãì]
+
 %%
 	char* letter;
+	file = fopen("graph.dot","w");
+	char* start="graph {\n"; 
+	fprintf(file,"%s",start);
+
 author { 
 	BEGIN AUTHOR;
 }
 editor {
 	BEGIN EDITOR;
 }
+
+	/*CONTEXTO DO AUTOR*/
 <AUTHOR>[\ \t]*=[\ \t]*[\"{] {
 	printf("author = {");
 }
 <AUTHOR>[\"}], {
+	if(find==1) writeFile();
 	rewritten(text);
 	indice=0;
 	text[0]=0;
+	find=0;
+	rest();
 	printf("},");
 	BEGIN INITIAL;
 }
 <AUTHOR>\  {}
 <AUTHOR>and\  {
+	text[indice-1]=0;
+	if(strcmp(actor,text)==0) find=1;
+	else addElement(text);
 	rewritten(text);
 	indice=0;
 	text[0]=0;
@@ -43,6 +64,8 @@ editor {
 	text[indice++]=' ';
 	text[indice]=0;
 }
+
+	/*CONTEXTO DO EDITOR*/
 <EDITOR>[\ \t]*=[\ \t]*[\"{] {
 	printf("editor = {");
 }
@@ -53,6 +76,8 @@ editor {
 <EDITOR>["{].*\n?[^=]*["}] {
 	BEGIN INITIAL;
 }
+
+	/*CONTEXTO GERAL*/
 <*>\\['~^`]. {
 	letter=changeLetters(yytext+2,(yytext+1)[0],0);
 	transfereChar(text,letter);
@@ -62,6 +87,26 @@ editor {
 	transfereChar(text,letter);
 }  
 %%
+
+/*FUNCOES*/
+
+void addElement(char* text){
+	char* element = (char*) malloc(sizeof(char)*32);
+	strcpy(element,text);
+	g_tree_insert(actores, element,element);	
+}
+
+gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
+	char* entry="\"%s\" -- \"%s\";\n";
+	fprintf(file, entry, actor, (char *)key);
+
+	return FALSE;
+}
+
+void writeFile(){
+	g_tree_foreach(actores, (GTraverseFunc)iterator, NULL);
+}
+
 
 int checkChar(char* text, char c){
     int len = strlen(text);
@@ -79,6 +124,8 @@ void rewritten(char* text){
 	char* res = (char*) malloc(sizeof(char)*strlen(text));
 	char* fim;
 	int i=0;
+	int side=0;
+	int limit,j;
 
 	char* token = strtok(text," ");
 	while(token!=NULL){
@@ -90,15 +137,26 @@ void rewritten(char* text){
 	}
 	lista[i]=NULL;
 	
-	strcpy(res,lista[i-1]);
-	strcpy(res+strlen(res),", ");
 
-	for(int j=0; j< i-1; j++){
+	if(!(checkChar(lista[0],','))){
+		strcpy(res,lista[i-1]);
+		strcpy(res+strlen(res),", ");
+		limit = i-1;
+		j=0;
+	}
+	else {
+		strcpy(res,lista[0]);
+		strcpy(res+strlen(res)," ");
+		limit = i; 
+		j=1;
+	}
+
+	for(; j<limit; j++){
 		if(checkChar(lista[j],'.')){
-			strcpy(res+strlen(res),lista[j]);
-			strcpy(res+strlen(res)," ");
+				strcpy(res+strlen(res),lista[j]);
+				strcpy(res+strlen(res)," ");
 		}
-		else{
+		else {
 			char buf[32];
 			sprintf(buf,"%c. ",lista[j][0]);
 			strcpy(res+strlen(res),buf);
@@ -153,12 +211,35 @@ char* changeLetters(char* letter,char c, int val){
 	return letter;
 }
 
-int main (int argc, char* argv[]) {
+gint compare(gconstpointer aPtr, gconstpointer bPtr){
+	char* a, *b;
 
-    if(argc == 2)
+	a = (char *)aPtr;  
+  	b = (char *)bPtr; 
+
+	if(strcmp(a,b)==0) return 0;
+	else if(strcmp(a,b)>0) return -1;
+	return 1;
+}
+
+void rest(){
+	g_tree_destroy(actores);
+	actores = g_tree_new(compare);
+}
+
+int main (int argc, char* argv[]) {
+	actores = g_tree_new(compare);
+
+	actor = argv[2];
+
+    if(argc == 3)
       yyin = fopen(argv[1], "r");
 
     yylex();
 
+    char* end = "}";
+ 	fprintf(file,"%s",end);
+
+ 	system("dotty graph.dot");
     return 0;
 }

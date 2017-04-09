@@ -2,7 +2,7 @@ V1=processador2
 V2=processador
 $(V1): $(V1).fl
 	flex $(V1).fl
-	cc lex.yy.c -o $(V1) `pkg-config --cflags --libs glib-2.0`
+	cc -g lex.yy.c -o $(V1) `pkg-config --cflags --libs glib-2.0`
 
 $V2: $V2.fl
 	flex $V2.fl
