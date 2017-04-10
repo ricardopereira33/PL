@@ -21,11 +21,11 @@ FILE* fileOutput;
 %}
 %x AUTHOR EDITOR
 
-L       [a-zA-Z.,úàáâéíçãìõ]
+L [a-zA-Z.,úàáâéíçãìõ]
 
 %%
 	char* letter;
-	file = fopen("graph.dot","wr");
+	file = fopen("graph.dot","w");
 	char* start="graph {\n"; 
 	fprintf(file,"%s",start);
 
@@ -48,7 +48,7 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	fprintf(fileOutput,"},");
 	BEGIN INITIAL;
 }
-<AUTHOR>\ |\n {}
+<AUTHOR>\ |\n|\{|\} {}
 <AUTHOR>and[\ \n] {
 	text[indice-1]=0;
 	if(strcmp(actor,text)==0) find=1;
@@ -59,6 +59,7 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	fprintf(fileOutput,"%s",yytext);
 }
 <AUTHOR>{L}* {
+	printf("-%s-\n",yytext);
 	strcpy(text+indice,yytext);
 	indice+=strlen(yytext);
 	text[indice++]=' ';
@@ -170,7 +171,7 @@ void rewritten(char* text){
 
 void transfereChar(char* text, char* letter){
 	text[indice-1]=letter[0];
-	text[indice++]=letter[1];
+	if(strlen(letter)>1) text[indice++]=letter[1];
 	text[indice]=0;
 }
 
