@@ -38,8 +38,8 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	BEGIN EDITOR;
 }
 
-	/*CONTEXTO DO AUTOR*/
-<AUTHOR>[\"}], {
+	/*CONTEXTO DO AUTOR E EDITOR*/
+<AUTHOR,EDITOR>[\"}], {
 	if(find==1) writeFile();
 	if(strlen(text)>0) rewritten(text);
 	restText();
@@ -48,8 +48,10 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	fprintf(fileOutput,"},");
 	BEGIN INITIAL;
 }
-<AUTHOR>\ |\n|\{|\} {}
-<AUTHOR>and[\ \n] {
+<AUTHOR,EDITOR>\ |\n|\{|\} {}
+
+	/*CONTEXTO DO ACTOR*/
+<AUTHOR>and[\ \n] { 
 	text[indice-1]=0;
 	if(strcmp(actor,text)==0) find=1;
 	else addElement(text);
@@ -58,28 +60,26 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	if(yytext[strlen(yytext)-1]=='\n') yytext[strlen(yytext)-1]=' ';
 	fprintf(fileOutput,"%s",yytext);
 }
-<AUTHOR>{L}* {
+	/*CONTEXTO DO EDITOR*/
+<EDITOR>and[\ \n] { 
+	text[indice-1]=0;
+	if(strlen(text)>0) rewritten(text);
+	restText();
+	if(yytext[strlen(yytext)-1]=='\n') yytext[strlen(yytext)-1]=' ';
+	fprintf(fileOutput,"%s",yytext);
+}
+	/*CONTEXTO DO AUTOR E EDITOR*/
+<AUTHOR,EDITOR>{L}* {
 	strcpy(text+indice,yytext);
 	indice+=strlen(yytext);
 	text[indice++]=' ';
 	text[indice]=0;
 }
-
-	/*CONTEXTO DO EDITOR*/
-<EDITOR>[\"}], {
-	fprintf(fileOutput,"},");
-	BEGIN INITIAL;
-}
-<EDITOR>["{].*\n?[^=]*["}] {
-	BEGIN INITIAL;
-}
-
-	/*CONTEXTO GERAL*/
-<*>\\['~^`]. {
+<AUTHOR,EDITOR>\\['~^`]. {
 	letter=changeLetters(yytext+2,(yytext+1)[0],0);
 	transfereChar(text,letter);
 }
-<*>\\´. {
+<AUTHOR,EDITOR>\\´. {
 	letter=changeLetters(yytext+3,(yytext+1)[0],1);
 	transfereChar(text,letter);
 }
