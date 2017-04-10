@@ -876,7 +876,6 @@ case 6:
 YY_RULE_SETUP
 #line 61 "processador2.fl"
 {
-	printf("-%s-\n",yytext);
 	strcpy(text+indice,yytext);
 	indice+=strlen(yytext);
 	text[indice++]=' ';
@@ -886,7 +885,7 @@ YY_RULE_SETUP
 /*CONTEXTO DO EDITOR*/
 case 7:
 YY_RULE_SETUP
-#line 70 "processador2.fl"
+#line 69 "processador2.fl"
 {
 	fprintf(fileOutput,"},");
 	BEGIN INITIAL;
@@ -895,7 +894,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 74 "processador2.fl"
+#line 73 "processador2.fl"
 {
 	BEGIN INITIAL;
 }
@@ -903,7 +902,7 @@ YY_RULE_SETUP
 /*CONTEXTO GERAL*/
 case 9:
 YY_RULE_SETUP
-#line 79 "processador2.fl"
+#line 78 "processador2.fl"
 {
 	letter=changeLetters(yytext+2,(yytext+1)[0],0);
 	transfereChar(text,letter);
@@ -911,7 +910,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 83 "processador2.fl"
+#line 82 "processador2.fl"
 {
 	letter=changeLetters(yytext+3,(yytext+1)[0],1);
 	transfereChar(text,letter);
@@ -919,10 +918,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 88 "processador2.fl"
+#line 87 "processador2.fl"
 ECHO;
 	YY_BREAK
-#line 926 "lex.yy.c"
+#line 925 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(AUTHOR):
 case YY_STATE_EOF(EDITOR):
@@ -1921,7 +1920,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 88 "processador2.fl"
+#line 87 "processador2.fl"
 
 
 
@@ -1963,7 +1962,7 @@ int checkChar(char* text, char c){
 
 void rewritten(char* text){
 	char** lista = (char**) malloc(sizeof(char*)*8);
-	char* res = (char*) malloc(sizeof(char)*strlen(text));
+	char* res = (char*) malloc(sizeof(char)*strlen(text)*2);
 	char* fim;
 	int i=0;
 	int side=0;
@@ -1995,6 +1994,7 @@ void rewritten(char* text){
 
 	for(; j<limit; j++){
 		if(i>0 && checkChar(lista[j],'.')){
+				
 				strcpy(res+strlen(res),lista[j]);
 				strcpy(res+strlen(res)," ");
 		}

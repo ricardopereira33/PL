@@ -21,7 +21,7 @@ FILE* fileOutput;
 %}
 %x AUTHOR EDITOR
 
-L [a-zA-Z.,úàáâéíçãìõ]
+L [a-zA-Zúàáâéíçãìõ.,]
 
 %%
 	char* letter;
@@ -59,7 +59,6 @@ editor[\ \t]*=[\ \t]*[\"{] {
 	fprintf(fileOutput,"%s",yytext);
 }
 <AUTHOR>{L}* {
-	printf("-%s-\n",yytext);
 	strcpy(text+indice,yytext);
 	indice+=strlen(yytext);
 	text[indice++]=' ';
@@ -125,7 +124,7 @@ int checkChar(char* text, char c){
 
 void rewritten(char* text){
 	char** lista = (char**) malloc(sizeof(char*)*8);
-	char* res = (char*) malloc(sizeof(char)*strlen(text));
+	char* res = (char*) malloc(sizeof(char)*strlen(text)*2);
 	char* fim;
 	int i=0;
 	int side=0;
@@ -157,6 +156,7 @@ void rewritten(char* text){
 
 	for(; j<limit; j++){
 		if(i>0 && checkChar(lista[j],'.')){
+				
 				strcpy(res+strlen(res),lista[j]);
 				strcpy(res+strlen(res)," ");
 		}
