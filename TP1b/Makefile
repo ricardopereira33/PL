@@ -1,4 +1,4 @@
-V1=processador2
+V1=processador4
 V2=processador
 $(V1): $(V1).fl
 	flex $(V1).fl

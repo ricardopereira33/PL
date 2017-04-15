@@ -363,8 +363,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 10
-#define YY_END_OF_BUFFER 11
+#define YY_NUM_RULES 7
+#define YY_END_OF_BUFFER 8
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -372,13 +372,15 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[50] =
+static yyconst flex_int16_t yy_accept[66] =
     {   0,
-        0,    0,    7,    7,    7,    7,   11,   10,   10,   10,
-        4,   10,    7,   10,    7,    4,    7,    0,    0,    3,
-        7,    0,    0,    7,    7,    0,    0,    8,    0,    7,
-        7,    0,    0,    9,    5,    6,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    1,    0,    2,    0
+        0,    0,    0,    0,    0,    0,    0,    0,    8,    7,
+        7,    5,    4,    6,    0,    5,    5,    5,    4,    4,
+        4,    6,    6,    6,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    1,    0,    0,    2,    0,    0,
+        0,    0,    0,    3,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -386,24 +388,24 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    4,    1,    5,    1,    1,    1,    1,    6,    1,
-        1,    1,    1,    7,    1,    8,    1,    1,    1,    1,
+        1,    4,    1,    5,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    3,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        9,    1,    1,    1,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        1,   10,    1,    6,    1,    6,   11,    8,    8,   12,
+        6,    7,    1,    1,    8,    3,    9,    3,   10,    3,
+        3,    3,   11,    3,    3,   12,   13,   14,   15,   16,
+        3,   17,   18,   19,   20,    3,    3,   21,   22,    3,
+        1,    1,    1,    1,    1,    1,    3,    3,    3,    3,
 
-       13,    8,    8,   14,   15,    8,    8,    8,    8,   16,
-       17,    8,    8,   18,    8,   19,   20,    8,    8,    8,
-        8,    8,   21,    1,   22,    6,    1,    1,    1,    1,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
+        3,    3,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    8,
-        8,    8,    8,    1,    1,    1,    8,    1,    8,    1,
-        1,    8,    8,    1,    1,    1,    1,    1,    1,   23,
-        8,    1,    1,    1,    1,    8,    1,    1,    1,    1,
-        1,    1,    1,   24,    8,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    3,
+        3,    3,    3,    1,    1,    1,    3,    1,    3,    1,
+        1,    3,    3,    1,    1,    1,    1,    1,    3,    1,
+        3,    1,    1,    1,    1,    3,    1,    1,    1,    1,
+        1,    1,    1,    1,    3,    1,    1,    1,    1,    1,
 
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -413,69 +415,63 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[25] =
+static yyconst flex_int32_t yy_meta[23] =
     {   0,
-        1,    1,    2,    1,    1,    1,    3,    3,    1,    1,
-        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-        1,    1,    1,    1
+        1,    2,    2,    2,    1,    1,    1,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2
     } ;
 
-static yyconst flex_int16_t yy_base[54] =
+static yyconst flex_int16_t yy_base[70] =
     {   0,
-        0,    1,   14,    0,   64,   63,   73,  107,   52,   59,
-      107,   63,    0,   33,   53,   61,   51,   47,   50,  107,
-        0,    0,   41,   51,   50,   42,   36,  107,    0,    0,
-        2,   36,   33,  107,  107,  107,   31,   27,   38,   39,
-       42,   56,   50,   76,    0,  107,    0,  107,  107,   97,
-        4,  100,  103
+       63,   62,   64,   63,   62,   61,   60,   59,   65,   74,
+       50,    0,    1,    4,   55,   60,   59,   58,   57,   56,
+       55,   54,   53,   52,   40,   42,   30,   46,   30,   26,
+       31,   36,   39,   39,    0,    0,   28,   34,   31,   21,
+       19,   29,   24,   19,   13,   20,   25,   22,   13,   25,
+       10,    9,   22,   11,   74,    8,   13,   74,    9,    0,
+        6,   15,    5,   74,   74,   16,   11,    8,    5
     } ;
 
-static yyconst flex_int16_t yy_def[54] =
+static yyconst flex_int16_t yy_def[70] =
     {   0,
-       50,   50,   49,    3,    3,    3,   49,   49,   49,   49,
-       49,   49,   51,   49,   51,   49,   51,   49,   49,   49,
-       51,   52,   49,   51,   51,   49,   49,   49,   53,   51,
-       51,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49,   49,   49,   49,   42,   49,   44,   49,    0,   49,
-       49,   49,   49
+       66,   66,   66,   66,   66,   66,   66,   66,   65,   65,
+       65,   67,   68,   69,   65,   67,   67,   67,   68,   68,
+       68,   69,   69,   69,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,    0,   65,   65,   65,   65
     } ;
 
-static yyconst flex_int16_t yy_nxt[132] =
+static yyconst flex_int16_t yy_nxt[97] =
     {   0,
-       49,   49,   35,   35,   36,   36,   21,   49,   49,   49,
-        9,    9,   10,   10,    8,    8,   11,   11,   12,    8,
-       13,   13,    8,   14,   15,   13,   13,   13,   13,   13,
-       13,   13,   13,   13,   11,   16,    8,    8,   22,   41,
-       43,   41,   43,   41,   40,   41,   42,   44,   39,   38,
-       42,   43,   37,   43,   33,   32,   23,   45,   44,   45,
-       46,   31,   30,   29,   27,   26,   25,   20,   24,   20,
-       19,   18,   49,   17,   17,   49,   46,   47,   49,   47,
-       48,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49,   49,   49,   49,   49,   49,   48,    8,    8,    8,
+       65,   16,   19,   18,   21,   22,   23,   24,   36,   20,
+       40,   37,   17,   38,   41,   39,   10,   10,   50,   64,
+       63,   62,   53,   61,   60,   59,   58,   57,   56,   55,
+       54,   53,   52,   51,   50,   49,   48,   47,   46,   45,
+       44,   43,   42,   35,   34,   33,   32,   31,   30,   29,
+       28,   27,   26,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   25,   15,   65,   14,   14,   13,   13,   12,
+       12,   11,   11,    9,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65
 
-       28,   49,   28,   34,   49,   34,    7,   49,   49,   49,
-       49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49
     } ;
 
-static yyconst flex_int16_t yy_chk[132] =
+static yyconst flex_int16_t yy_chk[97] =
     {   0,
-        0,    0,   30,   30,   31,   31,   51,    0,    0,    0,
-        1,    2,    1,    2,    3,    3,    3,    3,    3,    3,
-        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-        3,    3,    3,    3,    3,    3,    3,    3,   14,   39,
-       40,   39,   40,   41,   38,   41,   39,   40,   37,   33,
-       41,   43,   32,   43,   27,   26,   14,   42,   43,   42,
-       42,   25,   24,   23,   19,   18,   17,   16,   15,   12,
-       10,    9,    7,    6,    5,    0,   42,   44,    0,   44,
-       44,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,   44,   50,   50,   50,
+        0,   12,   13,   12,   13,   14,   69,   14,   35,   68,
+       36,   35,   67,   35,   36,   35,   66,   66,   63,   62,
+       61,   60,   59,   57,   56,   54,   53,   52,   51,   50,
+       49,   48,   47,   46,   45,   44,   43,   42,   41,   40,
+       39,   38,   37,   34,   33,   32,   31,   30,   29,   28,
+       27,   26,   25,   24,   23,   22,   21,   20,   19,   18,
+       17,   16,   15,   11,    9,    8,    7,    6,    5,    4,
+        3,    2,    1,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
+       65,   65,   65,   65,   65,   65
 
-       52,    0,   52,   53,    0,   53,   49,   49,   49,   49,
-       49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
-       49
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -492,32 +488,28 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "processador2.fl"
-#line 3 "processador2.fl"
+#line 1 "processador4.fl"
+#line 3 "processador4.fl"
 #include <glib.h>
 #include <string.h>
+GTree* pessoas;
+GTree* cidades;
+GTree* paises;
+FILE* start;
+FILE* per;
+FILE* cid;
+FILE* pais;
+gboolean finder(gpointer key, gpointer value, gpointer user_data);
+void init();
+void insertPerson(char* yytext);
+void insertCountryCity(char* yytext, int index);
 
-char* changeLetters(char* letter, char c, int val);
-void transfereChar(char* text, char* letter);
-void rewritten(char* text);
-void addElement(char* text);
-void writeFile();
-void restText();
-void rest();
-
-GTree* actores;
-char text[64];
-char* reverseText, *actor, *entry;
-int indice=0, find=0;
-FILE* file;
-FILE* fileOutput;
-
-
-#line 517 "lex.yy.c"
+#line 508 "lex.yy.c"
 
 #define INITIAL 0
-#define AUTHOR 1
-#define EDITOR 2
+#define PERSON 1
+#define CITY 2
+#define COUNTRY 3
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -697,14 +689,16 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 26 "processador2.fl"
+#line 21 "processador4.fl"
 
-	char* letter;
-	file = fopen("graph.dot","w");
-	char* start="graph {\n"; 
-	fprintf(file,"%s",start);
+  start = fopen("processadorNamed.html", "w");
+  per = fopen("pessoas.html", "w");
+  cid = fopen("cidades.html", "w");
+  pais = fopen("paises.html", "w");
+ /*INICIO*/
+  init();
 
-#line 708 "lex.yy.c"
+#line 702 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -757,13 +751,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 50 )
+				if ( yy_current_state >= 66 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 107 );
+		while ( yy_base[yy_current_state] != 74 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -789,104 +783,68 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 32 "processador2.fl"
-{ 
-	fprintf(fileOutput,"author = {");
-	BEGIN AUTHOR;
+#line 29 "processador4.fl"
+{
+	printf("%s",yytext);
+	BEGIN CITY;
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 36 "processador2.fl"
+#line 33 "processador4.fl"
 {
-	fprintf(fileOutput,"editor = {");
-	BEGIN EDITOR;
+	printf("%s",yytext);
+	BEGIN PERSON;
 }
 	YY_BREAK
-/*CONTEXTO DO AUTOR E EDITOR*/
 case 3:
 YY_RULE_SETUP
-#line 42 "processador2.fl"
+#line 37 "processador4.fl"
 {
-	if(find==1) writeFile();
-	if(strlen(text)>0) rewritten(text);
-	restText();
-	find=0;
-	rest();
-	fprintf(fileOutput,"},");
-	BEGIN INITIAL;
+	printf("%s",yytext);
+	BEGIN COUNTRY;
 }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 51 "processador2.fl"
-{}
+#line 41 "processador4.fl"
+{
+	printf("%s",yytext);
+	insertCountryCity(yytext+1,1);
+	BEGIN INITIAL;	
+}
 	YY_BREAK
-/*CONTEXTO DO ACTOR*/
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 54 "processador2.fl"
-{ 
-	text[indice-1]=0;
-	if(strcmp(actor,text)==0) find=1;
-	else addElement(text);
-	if(strlen(text)>0) rewritten(text);
-	restText();
-	if(yytext[strlen(yytext)-1]=='\n') yytext[strlen(yytext)-1]=' ';
-	fprintf(fileOutput,"%s",yytext);
+#line 46 "processador4.fl"
+{
+	printf("%s",yytext);
+	insertPerson(yytext+1);
+	BEGIN INITIAL;	
 }
 	YY_BREAK
-/*CONTEXTO DO EDITOR*/
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 64 "processador2.fl"
-{ 
-	text[indice-1]=0;
-	if(strlen(text)>0) rewritten(text);
-	restText();
-	if(yytext[strlen(yytext)-1]=='\n') yytext[strlen(yytext)-1]=' ';
-	fprintf(fileOutput,"%s",yytext);
+#line 51 "processador4.fl"
+{
+	printf("%s",yytext);
+	insertCountryCity(yytext+1,0);
+	BEGIN INITIAL;	
 }
 	YY_BREAK
-/*CONTEXTO DO AUTOR E EDITOR*/
 case 7:
 YY_RULE_SETUP
-#line 72 "processador2.fl"
-{
-	strcpy(text+indice,yytext);
-	indice+=strlen(yytext);
-	text[indice++]=' ';
-	text[indice]=0;
-}
-	YY_BREAK
-case 8:
-YY_RULE_SETUP
-#line 78 "processador2.fl"
-{
-	letter=changeLetters(yytext+2,(yytext+1)[0],0);
-	transfereChar(text,letter);
-}
-	YY_BREAK
-case 9:
-YY_RULE_SETUP
-#line 82 "processador2.fl"
-{
-	letter=changeLetters(yytext+3,(yytext+1)[0],1);
-	transfereChar(text,letter);
-}
-	YY_BREAK
-case 10:
-YY_RULE_SETUP
-#line 87 "processador2.fl"
+#line 56 "processador4.fl"
 ECHO;
 	YY_BREAK
-#line 887 "lex.yy.c"
+#line 844 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(AUTHOR):
-case YY_STATE_EOF(EDITOR):
+case YY_STATE_EOF(PERSON):
+case YY_STATE_EOF(CITY):
+case YY_STATE_EOF(COUNTRY):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1177,7 +1135,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 50 )
+			if ( yy_current_state >= 66 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1205,11 +1163,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 50 )
+		if ( yy_current_state >= 66 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 49);
+	yy_is_jam = (yy_current_state == 65);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1882,137 +1840,72 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 87 "processador2.fl"
+#line 56 "processador4.fl"
 
 
 
-/*FUNCOES*/
+void insertCountryCity(char* yytext,int w){
+	printf("-|%s|-",yytext);
+	char* value = (char*)malloc(sizeof(char) * 32);
+	char* indice = (char*)malloc(sizeof(char) * 32);
+	int i =0;
 
-void restText(){
-	indice=0;
-	text[0]=0;
-}
-
-void addElement(char* text){
-	char* element = (char*) malloc(sizeof(char)*32);
-	strcpy(element,text);
-	g_tree_insert(actores, element,element);	
-}
-
-gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
-	char* entry="\"%s\" -- \"%s\";\n";
-	fprintf(file, entry, actor, (char *)key);
-
-	return FALSE;
-}
-
-void writeFile(){
-	g_tree_foreach(actores, (GTraverseFunc)iterator, NULL);
-}
-
-int checkChar(char* text, char c){
-	if(text==NULL) printf("xx");
-    int len = strlen(text);
-    int i;
-    for(i = 0; i < len; i++){
-      if(text[i] == c){
-       	return 1;
-      }
-   	}
-   	return 0;
-}
-
-void rewritten(char* text){
-	char** lista = (char**) malloc(sizeof(char*)*8);
-	char* res = (char*) malloc(sizeof(char)*strlen(text)*2);
-	char* fim;
-	int i=0;
-	int side=0;
-	int limit,j;
-
-	char* token = strtok(text," ");
+	char* token = strtok(yytext," \n");
+	strcpy(value,token);
+	strcpy(indice,token);
+	i+=strlen(token);
 	while(token!=NULL){
-		fim = (char*) malloc(sizeof(char)*32);
-		strcpy(fim,token);
-		lista[i]=fim;
-		i++;
-		token = strtok(NULL," ");
-	}
-	lista[i]=NULL;
-	
-
-	if(i>0 && !(checkChar(lista[0],','))){
-		strcpy(res,lista[i-1]);
-		strcpy(res+strlen(res),", ");
-		limit = i-1;
-		j=0;
-	}
-	else {
-		strcpy(res,lista[0]);
-		strcpy(res+strlen(res)," ");
-		limit = i; 
-		j=1;
-	}
-
-	for(; j<limit; j++){
-		if(i>0 && checkChar(lista[j],'.')){
-				
-				strcpy(res+strlen(res),lista[j]);
-				strcpy(res+strlen(res)," ");
+		token = strtok(NULL," \n");
+		if(token!=NULL){
+			if(i!=0){
+				strcpy(value+i,"+");
+				strcpy(indice+i," ");
+				i++;
+			}
+			strcpy(value+i,token);
+			strcpy(indice+i,token);
 		}
-		else {
-			char buf[32];
-			sprintf(buf,"%c. ",lista[j][0]);
-			strcpy(res+strlen(res),buf);
-		}	
+		else break;
+		i+=strlen(token);
 	}
-	fprintf(fileOutput,"%s",res);
+	value[strlen(value)]=0;
+	indice[strlen(indice)]=0;
+	if(w==1)
+		g_tree_insert(cidades,indice,value);
+	else g_tree_insert(paises,indice,value);
 }
 
-void transfereChar(char* text, char* letter){
-	text[indice-1]=letter[0];
-	if(strlen(letter)>1) text[indice++]=letter[1];
-	text[indice]=0;
+void insertPerson(char* yytext){
+	char* value = (char*)malloc(sizeof(char) * 32);
+	strcpy(value,yytext);
+ 	g_tree_insert(pessoas,value,value);
 }
 
-char* changeLetters(char* letter,char c, int val){
-	switch(letter[0]){
-		case 'a':	if(c == '\'' || val == 1) return("á");
-					else if(c == '~') return ("ã");
-					else if(c == '`') return ("à");
-					break;
-		case 'o':	if(c == '\'' ||  val == 1) return ("ó");
-					else if(c == '~') return ("õ");
-					else if(c == '`') return ("ò");
-					break;
-		case 'e':	if(c == '\'' ||  val == 1) return ("é");
-					else if(c == '^') return ("ê");
-					break;
-		case 'i':	if(c == '\'' ||  val == 1) return ("í");
-					else if(c == '`') return ("ì");
-					break;
-		case 'u':	if(c == '\'' ||  val == 1) return ("ú");
-					else if(c == '`') return ("ù");
-					break;
-		case 'A':	if(c == '\'' ||  val == 1) return ("Á");
-					else if(c == '~') return ("Ã");
-					else if(c == '`') return ("À");
-					break;
-		case 'O':	if(c == '\'' ||  val == 1) return ("Ó");
-					else if(c == '~') return ("Õ");
-					else if(c == '`') return ("Ò");
-					break;
-		case 'E':	if(c == '\'' ||  val == 1) return ("É");
-					else if(c == '^') return ("Ê");
-					break;
-		case 'I':	if(c == '\'' ||  val == 1) return ("Í");
-					else if(c == '`') return ("Ì");
-					break;
-		case 'U':	if(c == '\'' ||  val == 1) return ("Ú");
-					else if(c == '`') return ("Ù");
-					break;
-	}
-	return letter;
+void init(){
+	char* enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
+  	char* head = "<h1 align=\"center\"> Processador de Named Entities </h1>\n<hr>";
+  	char* referencia = "<li><a href=\"%s\"> %s </a></li>\n\n";
+
+  	fprintf(start,"%s",enc);
+  	fprintf(pais,"%s",enc);
+  	fprintf(cid,"%s",enc);
+  	fprintf(per,"%s",enc);
+
+  	fprintf(start,"%s",head);
+  	fprintf(pais,"%s",head);
+  	fprintf(cid,"%s",head);
+  	fprintf(per,"%s",head);
+
+  	fprintf(start,referencia,"pessoas.html","Pessoas");
+  	fprintf(start,referencia,"cidades.html","Cidades");
+  	fprintf(start,referencia,"paises.html","Paises");
+}
+
+void end(){
+  	fprintf(start,"%s","</body> </html>");
+  	fprintf(pais,"%s","</body> </html>");
+  	fprintf(cid,"%s","</body> </html>");
+  	fprintf(per,"%s","</body> </html>");
 }
 
 gint compare(gconstpointer aPtr, gconstpointer bPtr){
@@ -2021,32 +1914,70 @@ gint compare(gconstpointer aPtr, gconstpointer bPtr){
 	a = (char *)aPtr;  
   	b = (char *)bPtr; 
 
-	if(strcmp(a,b)==0) return 0;
-	else if(strcmp(a,b)>0) return -1;
-	return 1;
+	if(strcmp(a,b)>0) return 1;
+	else if(strcmp(a,b)==0) return 0;
+	return -1;
 }
 
-void rest(){
-	if(g_tree_height(actores)>0){
-		g_tree_destroy(actores);
-		actores = g_tree_new(compare);
-	}
+gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
+	char* table_entry = "<tr> <td> %s </td> </tr>";
+	fprintf(per, table_entry, (char*)key);
+
+	return FALSE;
+}
+
+gboolean iterator2(gpointer key, gpointer value, gpointer user_data) {
+	char* table_entry = "<tr> <td> %s </td><td> %s </td> </tr>";
+	char* referencia = "<li><a href=\"%s%s\"> Link </a></li>\n";
+	char* ref = "https://www.google.pt/maps/place/";
+  	char buf[128];
+
+  	sprintf(buf,referencia,ref,value);
+
+  	if(*(gint*)user_data==1)
+		fprintf(cid, table_entry,(char*)key,buf);
+	else fprintf(pais, table_entry,(char*)key,buf);
+
+	return FALSE;
+}
+
+gboolean finder(gpointer key, gpointer value, gpointer user_data){
+	return strcmp(key,user_data)==0;
 }
 
 int main (int argc, char* argv[]) {
-	actores = g_tree_new(compare);
+	pessoas = g_tree_new(compare);
+	cidades = g_tree_new(compare);
+	paises = g_tree_new(compare);
 
-	actor = argv[2];
-
-    if(argc == 3)
+    if(argc == 2)
       yyin = fopen(argv[1], "r");
 
-    yyout = fopen("output.txt","w");
-    fileOutput = yyout;
     yylex();
 
-    char* end = "}";
- 	fprintf(file,"%s",end);
+    /*Lista de Pessoas*/
+    char* table_start = "<table style=\"width:30%\"><tr> <th>Pessoa</th></tr>";
+    fprintf(per,"%s",table_start);
+    g_tree_foreach(pessoas, (GTraverseFunc)iterator, NULL);
+ 	char* table_end = "</table>";
+ 	fprintf(per,"%s",table_end);
 
+ 	/*Lista de Cidades*/
+    table_start = "<table style=\"width:30%\"><tr> <th>Cidade</th> <th>Link</th> </tr>";
+    fprintf(cid,"%s",table_start);
+    gint* x = g_new(int,1);
+    *x=1;
+    g_tree_foreach(cidades, (GTraverseFunc)iterator2, x);
+ 	fprintf(cid,"%s",table_end);
+
+ 	/*Lista de Paises*/
+    table_start = "<table style=\"width:30%\"><tr> <th>Pais</th> <th>Link</th> </tr>";
+    fprintf(pais,"%s",table_start);
+    *x = 0;
+    g_tree_foreach(paises, (GTraverseFunc)iterator2, x);
+ 	fprintf(pais,"%s",table_end);
+
+    /*FIM*/
+    end();
     return 0;
 }

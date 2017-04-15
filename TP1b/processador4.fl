@@ -1,0 +1,194 @@
+%option noyywrap
+%{
+#include <glib.h>
+#include <string.h>
+GTree* pessoas;
+GTree* cidades;
+GTree* paises;
+FILE* start;
+FILE* per;
+FILE* cid;
+FILE* pais;
+gboolean finder(gpointer key, gpointer value, gpointer user_data);
+void init();
+void insertPerson(char* yytext);
+void insertCountryCity(char* yytext, int index);
+%}
+%x PERSON CITY COUNTRY
+
+L [a-zA-Zúàáâéíçãìõó.\ \n]
+
+%%
+  start = fopen("processadorNamed.html", "w");
+  per = fopen("pessoas.html", "w");
+  cid = fopen("cidades.html", "w");
+  pais = fopen("paises.html", "w");
+ /*INICIO*/
+  init();
+
+ENAMEX\ TYPE=\"(CITY|LOCATION)\" {
+	printf("%s",yytext);
+	BEGIN CITY;
+}
+ENAMEX\ TYPE=\"(PERSON|NAME)\" {
+	printf("%s",yytext);
+	BEGIN PERSON;
+}
+ENAMEX\ TYPE=\"COUNTRY\" {
+	printf("%s",yytext);
+	BEGIN COUNTRY;
+}
+<CITY>>[\ \t]?{L}* {
+	printf("%s",yytext);
+	insertCountryCity(yytext+1,1);
+	BEGIN INITIAL;	
+}
+<PERSON>>[\ \t]?{L}* {
+	printf("%s",yytext);
+	insertPerson(yytext+1);
+	BEGIN INITIAL;	
+}
+<COUNTRY>>[\ \t]?{L}* {
+	printf("%s",yytext);
+	insertCountryCity(yytext+1,0);
+	BEGIN INITIAL;	
+}
+%%
+
+void insertCountryCity(char* yytext,int w){
+	printf("-|%s|-",yytext);
+	char* value = (char*)malloc(sizeof(char) * 32);
+	char* indice = (char*)malloc(sizeof(char) * 32);
+	int i =0;
+
+	char* token = strtok(yytext," \n");
+	strcpy(value,token);
+	strcpy(indice,token);
+	i+=strlen(token);
+	while(token!=NULL){
+		token = strtok(NULL," \n");
+		if(token!=NULL){
+			if(i!=0){
+				strcpy(value+i,"+");
+				strcpy(indice+i," ");
+				i++;
+			}
+			strcpy(value+i,token);
+			strcpy(indice+i,token);
+		}
+		else break;
+		i+=strlen(token);
+	}
+	value[strlen(value)]=0;
+	indice[strlen(indice)]=0;
+	if(w==1)
+		g_tree_insert(cidades,indice,value);
+	else g_tree_insert(paises,indice,value);
+}
+
+void insertPerson(char* yytext){
+	char* value = (char*)malloc(sizeof(char) * 32);
+	strcpy(value,yytext);
+ 	g_tree_insert(pessoas,value,value);
+}
+
+void init(){
+	char* enc = "<html> <head> <meta charset='UTF-8'/> <style>table, th, td {border: 1px solid black; border-collapse: collapse;} th, td {padding: 5px;} th {text-align: left;}</style> </head> <body>";
+  	char* head = "<h1 align=\"center\"> Processador de Named Entities </h1>\n<hr>";
+  	char* referencia = "<li><a href=\"%s\"> %s </a></li>\n\n";
+
+  	fprintf(start,"%s",enc);
+  	fprintf(pais,"%s",enc);
+  	fprintf(cid,"%s",enc);
+  	fprintf(per,"%s",enc);
+
+  	fprintf(start,"%s",head);
+  	fprintf(pais,"%s",head);
+  	fprintf(cid,"%s",head);
+  	fprintf(per,"%s",head);
+
+  	fprintf(start,referencia,"pessoas.html","Pessoas");
+  	fprintf(start,referencia,"cidades.html","Cidades");
+  	fprintf(start,referencia,"paises.html","Paises");
+}
+
+void end(){
+  	fprintf(start,"%s","</body> </html>");
+  	fprintf(pais,"%s","</body> </html>");
+  	fprintf(cid,"%s","</body> </html>");
+  	fprintf(per,"%s","</body> </html>");
+}
+
+gint compare(gconstpointer aPtr, gconstpointer bPtr){
+	char* a, *b;
+
+	a = (char *)aPtr;  
+  	b = (char *)bPtr; 
+
+	if(strcmp(a,b)>0) return 1;
+	else if(strcmp(a,b)==0) return 0;
+	return -1;
+}
+
+gboolean iterator(gpointer key, gpointer value, gpointer user_data) {
+	char* table_entry = "<tr> <td> %s </td> </tr>";
+	fprintf(per, table_entry, (char*)key);
+
+	return FALSE;
+}
+
+gboolean iterator2(gpointer key, gpointer value, gpointer user_data) {
+	char* table_entry = "<tr> <td> %s </td><td> %s </td> </tr>";
+	char* referencia = "<li><a href=\"%s%s\"> Link </a></li>\n";
+	char* ref = "https://www.google.pt/maps/place/";
+  	char buf[128];
+
+  	sprintf(buf,referencia,ref,value);
+
+  	if(*(gint*)user_data==1)
+		fprintf(cid, table_entry,(char*)key,buf);
+	else fprintf(pais, table_entry,(char*)key,buf);
+
+	return FALSE;
+}
+
+gboolean finder(gpointer key, gpointer value, gpointer user_data){
+	return strcmp(key,user_data)==0;
+}
+
+int main (int argc, char* argv[]) {
+	pessoas = g_tree_new(compare);
+	cidades = g_tree_new(compare);
+	paises = g_tree_new(compare);
+
+    if(argc == 2)
+      yyin = fopen(argv[1], "r");
+
+    yylex();
+
+    /*Lista de Pessoas*/
+    char* table_start = "<table style=\"width:30%\"><tr> <th>Pessoa</th></tr>";
+    fprintf(per,"%s",table_start);
+    g_tree_foreach(pessoas, (GTraverseFunc)iterator, NULL);
+ 	char* table_end = "</table>";
+ 	fprintf(per,"%s",table_end);
+
+ 	/*Lista de Cidades*/
+    table_start = "<table style=\"width:30%\"><tr> <th>Cidade</th> <th>Link</th> </tr>";
+    fprintf(cid,"%s",table_start);
+    gint* x = g_new(int,1);
+    *x=1;
+    g_tree_foreach(cidades, (GTraverseFunc)iterator2, x);
+ 	fprintf(cid,"%s",table_end);
+
+ 	/*Lista de Paises*/
+    table_start = "<table style=\"width:30%\"><tr> <th>Pais</th> <th>Link</th> </tr>";
+    fprintf(pais,"%s",table_start);
+    *x = 0;
+    g_tree_foreach(paises, (GTraverseFunc)iterator2, x);
+ 	fprintf(pais,"%s",table_end);
+
+    /*FIM*/
+    end();
+    return 0;
+}
