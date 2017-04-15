@@ -9,12 +9,13 @@ FILE* start;
 FILE* per;
 FILE* cid;
 FILE* pais;
+int big = 0,small = 3000;
 gboolean finder(gpointer key, gpointer value, gpointer user_data);
 void init();
 void insertPerson(char* yytext);
 void insertCountryCity(char* yytext, int index);
 %}
-%x PERSON CITY COUNTRY
+%x PERSON CITY COUNTRY DATE
 
 L [a-zA-Zúàáâéíçãìõó.\ \n]
 
@@ -38,6 +39,11 @@ ENAMEX\ TYPE=\"COUNTRY\" {
 	printf("%s",yytext);
 	BEGIN COUNTRY;
 }
+TIMEX\ TYPE=\"DATE\" {
+	printf("%s",yytext);
+	BEGIN DATE;
+}
+
 <CITY>>[\ \t]?{L}* {
 	printf("%s",yytext);
 	insertCountryCity(yytext+1,1);
@@ -53,10 +59,16 @@ ENAMEX\ TYPE=\"COUNTRY\" {
 	insertCountryCity(yytext+1,0);
 	BEGIN INITIAL;	
 }
+<DATE>[0-9]{4} {
+	int num = atoi(yytext);
+	
+	if(big<num) big=num;
+	if(small>num) small=num;
+	BEGIN INITIAL;
+}	
 %%
 
 void insertCountryCity(char* yytext,int w){
-	printf("-|%s|-",yytext);
 	char* value = (char*)malloc(sizeof(char) * 32);
 	char* indice = (char*)malloc(sizeof(char) * 32);
 	int i =0;
@@ -166,11 +178,21 @@ int main (int argc, char* argv[]) {
 
     yylex();
 
+    fprintf(start,"%s","<hr><br><br>");
+
+    /*Datas*/
+    char* table_start = "<table style=\"width:30%\"><tr> <th>Ano mais Recente</th>";
+    fprintf(start,"%s<th> %d </th></tr>",table_start,big);
+ 	table_start = "<tr><th>Ano mais Antiga</th>";
+ 	fprintf(start,"%s<th> %d </th></tr>",table_start,small);
+ 	char* table_end = "</table>";
+ 	fprintf(start,"%s",table_end);
+
     /*Lista de Pessoas*/
-    char* table_start = "<table style=\"width:30%\"><tr> <th>Pessoa</th></tr>";
+    table_start = "<table style=\"width:30%\"><tr> <th>Pessoa</th></tr>";
     fprintf(per,"%s",table_start);
     g_tree_foreach(pessoas, (GTraverseFunc)iterator, NULL);
- 	char* table_end = "</table>";
+ 	table_end = "</table>";
  	fprintf(per,"%s",table_end);
 
  	/*Lista de Cidades*/
@@ -187,6 +209,7 @@ int main (int argc, char* argv[]) {
     *x = 0;
     g_tree_foreach(paises, (GTraverseFunc)iterator2, x);
  	fprintf(pais,"%s",table_end);
+
 
     /*FIM*/
     end();
