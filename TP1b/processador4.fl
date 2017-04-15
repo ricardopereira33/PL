@@ -10,14 +10,13 @@ FILE* per;
 FILE* cid;
 FILE* pais;
 int big = 0,small = 3000;
-gboolean finder(gpointer key, gpointer value, gpointer user_data);
 void init();
 void insertPerson(char* yytext);
 void insertCountryCity(char* yytext, int index);
 %}
 %x PERSON CITY COUNTRY DATE
 
-L [a-zA-Zúàáâéíçãìõó.\ \n]
+L [a-zA-Z.\ \núàáâéíçãìõó-]
 
 %%
   start = fopen("processadorNamed.html", "w");
@@ -31,7 +30,7 @@ ENAMEX\ TYPE=\"(CITY|LOCATION)\" {
 	printf("%s",yytext);
 	BEGIN CITY;
 }
-ENAMEX\ TYPE=\"(PERSON|NAME)\" {
+ENAMEX\ TYPE=\"(PERSON|NAME)\"(.{7,9}\"\?\?\")? {
 	printf("%s",yytext);
 	BEGIN PERSON;
 }
@@ -43,23 +42,23 @@ TIMEX\ TYPE=\"DATE\" {
 	printf("%s",yytext);
 	BEGIN DATE;
 }
-
-<CITY>>[\ \t]?{L}* {
+<CITY>{L}* {
 	printf("%s",yytext);
-	insertCountryCity(yytext+1,1);
-	BEGIN INITIAL;	
+	insertCountryCity(yytext,1);
+	BEGIN INITIAL;
 }
-<PERSON>>[\ \t]?{L}* {
+<PERSON>{L}* {
 	printf("%s",yytext);
-	insertPerson(yytext+1);
-	BEGIN INITIAL;	
+	insertPerson(yytext);
+	BEGIN INITIAL;
 }
-<COUNTRY>>[\ \t]?{L}* {
+<COUNTRY>{L}* {
 	printf("%s",yytext);
-	insertCountryCity(yytext+1,0);
+	insertCountryCity(yytext,0);
 	BEGIN INITIAL;	
 }
 <DATE>[0-9]{4} {
+	printf("%s",yytext);
 	int num = atoi(yytext);
 	
 	if(big<num) big=num;
@@ -69,9 +68,9 @@ TIMEX\ TYPE=\"DATE\" {
 %%
 
 void insertCountryCity(char* yytext,int w){
-	char* value = (char*)malloc(sizeof(char) * 32);
-	char* indice = (char*)malloc(sizeof(char) * 32);
-	int i =0;
+	char* value = (char*)malloc(sizeof(char) * 128);
+	char* indice = (char*)malloc(sizeof(char) * 128);
+	int i = 0;
 
 	char* token = strtok(yytext," \n");
 	strcpy(value,token);
@@ -93,15 +92,17 @@ void insertCountryCity(char* yytext,int w){
 	}
 	value[strlen(value)]=0;
 	indice[strlen(indice)]=0;
-	if(w==1)
+	if(w==1){
 		g_tree_insert(cidades,indice,value);
+	}
 	else g_tree_insert(paises,indice,value);
 }
 
 void insertPerson(char* yytext){
-	char* value = (char*)malloc(sizeof(char) * 32);
+	char* value = (char*)malloc(sizeof(char) * 128);
 	strcpy(value,yytext);
- 	g_tree_insert(pessoas,value,value);
+
+ 	if(strlen(value)>0) g_tree_insert(pessoas,value,value);
 }
 
 void init(){
@@ -162,10 +163,6 @@ gboolean iterator2(gpointer key, gpointer value, gpointer user_data) {
 	else fprintf(pais, table_entry,(char*)key,buf);
 
 	return FALSE;
-}
-
-gboolean finder(gpointer key, gpointer value, gpointer user_data){
-	return strcmp(key,user_data)==0;
 }
 
 int main (int argc, char* argv[]) {
