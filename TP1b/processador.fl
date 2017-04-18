@@ -49,12 +49,28 @@ n\'t {
 }
 %%
 
+int checkVerb(char * verb){
+
+	if(strcmp(verb,"the")==0) 		return 0;
+	else if(strcmp(verb,"it")==0) 	return 0;
+	else if(strcmp(verb,"also")==0) return 0;
+	else if(strcmp(verb,"your")==0) return 0;
+	else if(strcmp(verb,"then")==0) return 0;
+	else if(strcmp(verb,"them")==0) return 0;
+	else if(strcmp(verb,"my")==0) 	return 0;
+	else if(strcmp(verb,"my")==0) 	return 0;
+	else if(strcmp(verb,"its")==0) 	return 0;
+	else if(strcmp(verb,"by")==0) 	return 0;
+	else if(strcmp(verb,"this")==0) return 0;
+	else return 1;
+}
+
 void insertVerb(char* yytext, int index ){
 	char* value = (char*)malloc(sizeof(char) * 32);
 	int i=0;
-	char* token = strtok(yytext," ");
+	char* token = strtok(yytext," ?");
 	while(token!=NULL){
-		token = strtok(NULL," ");
+		token = strtok(NULL," ?");
 		if(token!=NULL && i<index)strcpy(value,token);
 		else break;
 		i++;
@@ -65,7 +81,8 @@ void insertVerb(char* yytext, int index ){
  	if(aux == NULL && strlen(value)>1){
  		gint* ind= g_new(gint,1);	
 		(*ind)=1;
-		g_hash_table_insert(verbos,value,ind); 
+		if(checkVerb(value))
+			g_hash_table_insert(verbos,value,ind); 
  	}
 	else if(strlen(value)>1){
 		gint* ind= g_new(gint,1);
