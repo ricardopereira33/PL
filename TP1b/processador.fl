@@ -23,7 +23,7 @@ void insertVerb(char* yytext, int index );
 \'m { 
 	fprintf(text,"%s"," am"); 
 }
-\'s { 
+(he|she|it)\'s { 
 	fprintf(text,"%s"," is"); 
 }
 \'re { 
