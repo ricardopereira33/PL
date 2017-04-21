@@ -12,7 +12,7 @@ void restText();
 void rest();
 
 GTree* actores;
-char text[64];
+char text[256];
 char* reverseText, *actor, *entry;
 int indice=0, find=0;
 FILE* file;
@@ -21,7 +21,7 @@ FILE* fileOutput;
 %}
 %x AUTHOR EDITOR
 
-L [a-zA-Zúàáâéíçãìõ.,]
+L [a-zA-Zúàáâéíçãìõ.,-]
 
 %%
 	char* letter;
@@ -40,6 +40,7 @@ editor[\ \t]*=[\ \t]*[\"{] {
 
 	/*CONTEXTO DO AUTOR E EDITOR*/
 <AUTHOR,EDITOR>[\"}], {
+	printf("FEITO!");
 	if(find==1) writeFile();
 	if(strlen(text)>0) rewritten(text);
 	restText();
@@ -111,7 +112,6 @@ void writeFile(){
 }
 
 int checkChar(char* text, char c){
-	if(text==NULL) printf("xx");
     int len = strlen(text);
     int i;
     for(i = 0; i < len; i++){
@@ -123,7 +123,7 @@ int checkChar(char* text, char c){
 }
 
 void rewritten(char* text){
-	char** lista = (char**) malloc(sizeof(char*)*8);
+	char** lista = (char**) malloc(sizeof(char*)*20);
 	char* res = (char*) malloc(sizeof(char)*strlen(text)*2);
 	char* fim;
 	int i=0;
