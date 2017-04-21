@@ -23,8 +23,11 @@ void insertVerb(char* yytext, int index );
 \'m { 
 	fprintf(text,"%s"," am"); 
 }
-\'s { 
-	fprintf(text,"%s"," is"); 
+([Hh]e|[Ss]he|[Ii]t)\'s {
+	char aux[strlen(yytext)-2];
+	strncpy(aux,yytext,strlen(yytext)-2);
+	aux[strlen(yytext)-2]=0;
+	fprintf(text,"%s%s",aux," is"); 
 }
 \'re { 
 	fprintf(text,"%s"," are"); 
