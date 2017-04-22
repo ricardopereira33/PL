@@ -40,7 +40,6 @@ editor[\ \t]*=[\ \t]*[\"{] {
 
 	/*CONTEXTO DO AUTOR E EDITOR*/
 <AUTHOR,EDITOR>[\"}], {
-	printf("FEITO!");
 	if(find==1) writeFile();
 	if(strlen(text)>0) rewritten(text);
 	restText();
@@ -241,7 +240,7 @@ int main (int argc, char* argv[]) {
     if(argc == 3)
       yyin = fopen(argv[1], "r");
 
-    yyout = fopen("output.txt","w");
+    yyout = fopen("output.bib","w");
     fileOutput = yyout;
     yylex();
 
