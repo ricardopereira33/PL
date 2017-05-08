@@ -9,41 +9,39 @@ int yylex();
 %}
 
 %union { 
-	char* s; 
-	int i; 
+	char* id; 
+	int num; 
 }
 
 %token NUM ID
 
 %type <s> ID
 %type <i> NUM
-%type <s> sexp
-%type <s> lista
 %%
 
 siplp: ints funcs BEGIN insts END   { }
      ;
 
-ints: Int intvars ';'               { }
+ints: Int intIDs ';'               { }
     ;
 
-intvars: intvar                     { }
-       | intvars ',' intvar         { }
-       ;
+intIDs: intID                      { }
+      | intIDs ',' intID           { }
+      ;
 
-intvar: VAR                         { }
-      | VAR '=' NUM                 { }
-      | VAR '[' NUM ']'             { }
-      | VAR '[' NUM ']' '[' NUM ']' { }
-	  ;
+intID: ID                         { }
+     | ID '=' NUM                 { }
+     | ID '[' NUM ']'             { }
+     | ID '[' NUM ']' '[' NUM ']' { }
+	 ;
 
 funcs: func                         { }
      | funcs func                   { }
      |                              { }
      ;
 
-func: f STRING '{' insts '}'        { }
-   ;
+func: func STRING '{' insts '}'        { }
+    ;
 
 insts: inst                         { }
      | insts inst                   { }
@@ -60,9 +58,9 @@ inst: write '(' factor ')' ';'         { }
     |                              { }
     ;
 
-data: VAR                           { }
-    | VAR '[' expr ']'              { }
-    | VAR '[' expr ']' '[' expr ']' { }
+data: ID                           { }
+    | ID '[' expr ']'              { }
+    | ID '[' expr ']' '[' expr ']' { }
 	;
 
 expr: parcel                 { }
@@ -85,9 +83,9 @@ parcel: parcel '*' factor    { }
       ;
 
 factor: NUM                 { }
-      | VAR                 { }
-      | VAR '[' expr ']'    { }
-      | VAR '[' expr ']''[' expr ']' { }
+      | ID                 	{ }
+      | ID '[' expr ']'    	{ }
+      | ID '[' expr ']''[' expr ']' { }
       | '(' expr ')'        { }
       ;
 

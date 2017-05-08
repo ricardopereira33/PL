@@ -1,21 +1,43 @@
 %option noyywrap yylineno
-%x INT INSTRUCTIONS READ WRITE ARRAYS
+%x INT INSTRUCTIONS READ WRITE ARRAYS EXEC EXP
 
 %%
-Int
-[a-zA-Z]+ 	{ yylval.s = strdup(yytext);
-			  return ID;}
-[0-9]+ 		{ yylval.i = atoi(yytext);
-			  return NUM;}
-[()] 		{ return yytext[0];}
-[ \n\t] 	{ }
+Int 					{ BEGIN INT; return Int; }
+<INT>[a-zA-Z]+ 			{ yylval.s = strdup(yytext); return ID; }
+<INT>[0-9]+ 			{ yylval.i = atoi(yytext); return NUM; }
+<INT>[,=\[\]] 			{ return yytext[0]; }
+<INT>;			  		{ BEGIN INITIAL; return yytext[0]; }
+<INT>[ \n\t] 			{ }
 
-BEGIN
+func 			  		{ BEGIN FUNC; return func; }
+<FUNC>[a-zA-Z]+   		{ }
+<FUNC>\{		  		{ BEGIN INSTRUCTIONS; return yytext[0]; }
+	
+BEGIN			  		{ BEGIN INSTRUCTIONS; return BEGIN; }
+<INSTRUCTIONS>END 		{ BEGIN INITIAL; return END; }
 
-END
+<INSTRUCTIONS>write 	{ BEGIN WRITE; return write; }
+<WRITE>;				{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
 
+<INSTRUCTIONS>read  	{ BEGIN READ; return read; }
+<READ>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
-<*>$.*		{ }
-<*>.|\n 	{ }
+
+<INSTRUCTIONS>exec  	{ BEGIN EXEC; return exec; }
+<EXEC>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
+
+
+<INSTRUCTIONS>[a-zA-Z]* { BEGIN EXP; return exp; }
+<EXP>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
+
+
+<INSTRUCTIONS>\?|inLoop	{ BEGIN CONDITION; return cond; } 
+<CONDITION>				{ }
+
+
+<INSTRUCTIONS>!\?|[{}] 	{ return yytext; }
+
+<*>$.*					{ }
+<*>[ \t\n]* 			{ }
 %%
