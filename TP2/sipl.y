@@ -4,38 +4,50 @@
 #include <glib.h>
 void yyerror (char *s);
 int yylex();
+void addVar(char* var);
+int getVar(char* var);
+void addArray(char* var, int l, int c);
+int getArray(char* var);
+int getColuns(char* var);
+
+
 
 int labelInfo;
 
 typedef struct Array{
-  int point;
-  int l;
-  int c;
+    int point;
+    int l;
+    int c;
 }Array;
 
+typedef struct VarInfo{
+    char* push;
+    char* store; 
+}VarInfo;
+    
 %}
   
 %union { 
-	char* id; 
-	int num;
-  char* push;
-  char* store; 
+    char* id; 
+    int num;
+    VarInfo varinfo;
 }
 
-%token BEGIN END Int F write read exec loop
+%token START END Int F iWrite iRead exe iLoop
 %token NUM ID STR
 
-%type <id> ID STR
+%type <id> ID STR intIDs intID ints funcs func insts inst portion factor expr
 %type <num> NUM
+%type <varinfo> var 
 %%
 
-siplp: ints funcs BEGIN insts END   { printf(res,"%sjump inic\n%sstart\ninic: %sstop\n",$1,$2,$4); } /*esqueleto do codigo assembley*/
+siplp: ints funcs START insts END   { printf("%sjump inic\n%sstart\ninic: %sstop\n",$1,$2,$4); } /*esqueleto do codigo assembley*/
      ;
 
-ints: Int intIDs ';'               { $$ = $2;}
+ints: Int intIDs ';'               { $$ = $2; }
     ;
 
-intIDs: intID                      { $$ = $1;}
+intIDs: intID                      { $$ = $1; }
       | intIDs ',' intID           { asprintf(&$$, "%s%s",$1,$3); }
       ;
 
@@ -50,22 +62,22 @@ funcs: func                         { $$ = $1; }
      |                              { $$ = ""; }
      ;
 
-func: F STRING '{' insts '}'        { asprintf(&$$, "%s: nop\n%s\treturn",$2,$4); }
+func: F STR '{' insts '}'           { asprintf(&$$, "%s: nop\n%s\treturn",$2,$4); }
     ;
 
 insts: inst                         { $$ = $1; }
      | insts inst                   { asprintf(&$$, "%s%s", $1, $2); }
 	   ;
 
-inst: write '(' factor ')' ';'                                    { asprintf(&$$, "%s\nwritei\n", $3); } /*retira um inteiro da pilha e impirme*/
-    | write '(' '"' STR '"' ')'';'                                { asprintf(&$$, "\tpushs \"%s\"\n\twrites\n", $4); } /*retira um endereço de uma string da pilha e impirme*/
-    | read '(' var ')' ';'                                        { asprintf(&$$, "%s\tread\n\tatoi\n\t%s",$3.push,$3.store); } 
-    | var '=' expr ';'                                            { asprintf(&$$, "%s%s%s", $1.push, $3, $1.store); } /*passar o valor para a variavel VAR*/
-    | '?''('expr')' '{' insts '}'                                 { asprintf(&$$, "%s\tjz LABEL.%d\n%sLABEL.%d: ", $3, labelInfo, $6, labelInfo); labelInfo++; } /*IF*/
-    | '?''('expr')''{' insts '}''!''?''{' insts '}' /* IF ELSE */ { asprintf(&$$, "%s\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: %sLABEL.%d: ", $3, labelInfo, $6, labelInfo+1, label, $10, labelInfo+1); labelInfo+=2; } /*IF ELSE*/
-    | loop '('expr')' '{' insts '}' /* WHILE */                   { asprintf(&$$, "LABEL.%d: %s\n\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: ", labelInfo, $3, labelInfo+1, $6, labelInfo , labelInfo+1); labelInfo+=2; } /*WHILE*/
-    | exec STR ';'                                                { asprintf(&$$, "\tpusha %s\n\tcall\n\tnop\n", $2); }
-    |                                                             { $$ = ""; }
+inst: iWrite '(' factor ')' ';'                                    { asprintf(&$$, "%s\nwritei\n", $3); } /*retira um inteiro da pilha e impirme*/
+    | iWrite '(' '"' STR '"' ')'';'                                { asprintf(&$$, "\tpushs \"%s\"\n\twrites\n", $4); } /*retira um endereço de uma string da pilha e impirme*/
+    | iRead '(' var ')' ';'                                        { asprintf(&$$, "%s\tread\n\tatoi\n\t%s",$3.push,$3.store); } 
+    | var '=' expr ';'                                             { asprintf(&$$, "%s%s%s", $1.push, $3, $1.store); } /*passar o valor para a variavel VAR*/
+    | '?''('expr')' '{' insts '}'                                  { asprintf(&$$, "%s\tjz LABEL.%d\n%sLABEL.%d: ", $3, labelInfo, $6, labelInfo); labelInfo++; } /*IF*/
+    | '?''('expr')''{' insts '}''!''?''{' insts '}' /* IF ELSE */  { asprintf(&$$, "%s\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: %sLABEL.%d: ", $3, labelInfo, $6, labelInfo+1, labelInfo, $11, labelInfo+1); labelInfo+=2; } /*IF ELSE*/
+    | iLoop '('expr')' '{' insts '}' /* WHILE */                   { asprintf(&$$, "LABEL.%d: %s\n\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: ", labelInfo, $3, labelInfo+1, $6, labelInfo , labelInfo+1); labelInfo+=2; } /*WHILE*/
+    | exe STR ';'                                                  { asprintf(&$$, "\tpusha %s\n\tcall\n\tnop\n", $2); }
+    |                                                              { $$ = ""; }
     ;
 
 var: ID                           { asprintf(&$$.push, "");
@@ -153,12 +165,13 @@ int getVar(char* var){
         asprintf(&error, "Variável (%s) não se encontra inicializada.", var);
         yyerror(error);
     }
+    return 0;
 }
 
 void addArray(char* var, int l, int c){
     int *point = (int *) g_hash_table_lookup(vars, var);
     Array *a = (Array *) g_hash_table_lookup(arrays, var);
-    char* error
+    char* error;
 
     if(point==NULL && a==NULL){
         a = (Array *) malloc(sizeof(Array));
@@ -172,7 +185,7 @@ void addArray(char* var, int l, int c){
         asprintf(&error, "Tamanho atribuido ao array (%s) inválido.[TamanhoMin >= 1]", var);
         yyerror(error);
     }
-    else if(array != NULL || a != NULL){
+    else if(point != NULL || a != NULL){
         asprintf(&error, "Array (%s) não se encontra inicializado.", var);
         yyerror(error);
     }
@@ -189,9 +202,10 @@ int getArray(char* var){
         asprintf(&error, "Array (%s) não se encontra inicializado.", var);
         yyerror(error);
     }
+    return 0;
 }
 
-int getColuns(){
+int getColuns(char* var){
     Array *a = (Array *) g_hash_table_lookup(arrays, var);
 
     if(a!=NULL){
@@ -202,4 +216,5 @@ int getColuns(){
         asprintf(&error, "Array (%s) não se encontra inicializado.", var);
         yyerror(error);
     }
+    return 0;
 }
