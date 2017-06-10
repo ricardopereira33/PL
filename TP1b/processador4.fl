@@ -65,6 +65,7 @@ TIMEX\ TYPE=\"DATE\" {
 	if(small>num) small=num;
 	BEGIN INITIAL;
 }	
+
 %%
 
 void insertCountryCity(char* yytext,int w){
