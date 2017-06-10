@@ -1,42 +1,62 @@
 %option noyywrap yylineno
-%x INT INSTRUCTIONS READ WRITE ARRAYS EXEC EXP
+%x INT INSTRUCTIONS READ WRITE INSTR ARRAYS EXEC EXP CONDITION
 
 %%
 Int 					{ BEGIN INT; return Int; }
-<INT>[a-zA-Z]+ 			{ yylval.s = strdup(yytext); return ID; }
-<INT>[0-9]+ 			{ yylval.i = atoi(yytext); return NUM; }
-<INT>[,=\[\]] 			{ return yytext[0]; }
+<INT>[a-zA-Z]+ 			{ yylval.id = strdup(yytext); return ID; }
+<INT>[0-9]+ 			{ yylval.num = atoi(yytext); return NUM; }
+<INT>[,=\[\]] 			{ return yytext[0]; } /*tokens que estao no meio da declaracao de variaveis*/
 <INT>;			  		{ BEGIN INITIAL; return yytext[0]; }
-<INT>[ \n\t] 			{ }
+<INT>[ \n\t]* 			{ }
 
 func 			  		{ BEGIN FUNC; return func; }
-<FUNC>[a-zA-Z]+   		{ }
+<FUNC>[a-zA-Z]+   		{ yylval.id = strdup(yytext); return STR;}
 <FUNC>\{		  		{ BEGIN INSTRUCTIONS; return yytext[0]; }
 	
 BEGIN			  		{ BEGIN INSTRUCTIONS; return BEGIN; }
 <INSTRUCTIONS>END 		{ BEGIN INITIAL; return END; }
+<INSTRUCTIONS>[ \t\n]   { }
 
 <INSTRUCTIONS>write 	{ BEGIN WRITE; return write; }
+<WRITE>[()\[\]]			{ return yytext[0]; }
+<WRITE>[a-zA-Z]+	    { yylval.id = strdup(yytext); return ID; }
+<WRITE>[0-9]+			{ yylval.num = atoi(yytext); return NUM; }
+<WRITE>["]				{ BEGIN INSTR; return yytext[0]; } /* string para ser imprimida no comando write (entre "")*/
+<INSTR>[^"]+			{ yylval.id = strdup(yytext); return STR;}
+<INSTR>["]				{ BEGIN WRITE; return yytext[0]; }
 <WRITE>;				{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
-
 <INSTRUCTIONS>read  	{ BEGIN READ; return read; }
+<READ>[()\[\]]			{ return yytext[0];}
+<READ>[a-zA-Z]+			{ yylval.id = strdup(yytext); return ID; }
+<READ>[0-9]+			{ yylval.num = atoi(yytext); return NUM; }
 <READ>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
+<READ>[\t ]*			{ }
 
 
 <INSTRUCTIONS>exec  	{ BEGIN EXEC; return exec; }
+<EXEC>[a-zA-z]+			{ yylval.id = strdup(yytext); return STR; }
 <EXEC>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
+<EXEC>[ \t\n]*			{ }
 
 
-<INSTRUCTIONS>[a-zA-Z]* { BEGIN EXP; return exp; }
+<INSTRUCTIONS>[a-zA-Z]+ { BEGIN EXP; yylval.id = strdup(yytext); return ID; }
+<EXP>[-+*/%()=\[\]]    	{ return yytext[0]; }
+<EXP>[0-9]+            	{ yylval.num = atoi(yytext); return NUM; }
+<EXP>[A-Za-z]+         	{ yylval.id = strdup(yytext); return ID; }
 <EXP>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
 
-<INSTRUCTIONS>\?|inLoop	{ BEGIN CONDITION; return cond; } 
-<CONDITION>				{ }
+<INSTRUCTIONS>\?				{ BEGIN CONDITION; return yytext[0]; } 
+<INSTRUCTIONS>loop				{ BEGIN CONDITION; return loop; } 
+<CONDITION>[-+*/%()=><!&|\[\]]	{ return yytext[0]; }
+<CONDITION>[0-9]+ 				{ yylval.num = atoi(yytext); return NUM; }
+<CONDITION>[a-zA-Z]+			{ yylval.id = strdup(yytext); return ID; }
+<CONDITION>\{					{ BEGIN INSTRUCTIONS; return yytext[0];}
+<CONDITION>[ \t\n]				{ }
 
 
-<INSTRUCTIONS>!\?|[{}] 	{ return yytext; }
+<INSTRUCTIONS>[!?{}] 	{ return yytext[0]; }
 
 <*>$.*					{ }
 <*>[ \t\n]* 			{ }
