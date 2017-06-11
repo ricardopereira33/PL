@@ -1,0 +1,34 @@
+	pushi 0
+	pushi 0
+	pushi 0
+	pushi 0
+jump inic
+start
+inic: 	pushi 5
+	storeg 0
+	pushi 0
+	storeg 1
+	pushi 1
+	storeg 2
+LABEL0: 	pushg 1
+	pushg 0
+	inf
+
+	jz LABEL1
+	read
+	atoi
+	storeg 3
+	pushg 2
+	pushg 3
+	mul
+	storeg 2
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL0
+LABEL1: 	pushs "O produtorio e: "
+	writes
+	pushg 2
+	writei
+stop

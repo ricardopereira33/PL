@@ -1,0 +1,42 @@
+	pushi 0
+	pushi 0
+	pushi 0
+	pushi 0
+jump inic
+start
+inic: 	pushs "Insira 4 numeros: "
+	writes
+	read
+	atoi
+	storeg 0
+	read
+	atoi
+	storeg 1
+	read
+	atoi
+	storeg 2
+	read
+	atoi
+	storeg 3
+	pushg 0
+	pushg 1
+	equal
+	pushg 1
+	pushg 2
+	equal
+	add
+	pushi 2
+	equal
+	pushg 2
+	pushg 3
+	equal
+	add
+	pushi 2
+	equal
+	jz LABEL0
+	pushs "Os lados introduzidos formem um quadrado."
+	writes
+	jump LABEL1
+LABEL0: 	pushs "Os lados introduzidos nao formem um quadrado."
+	writes
+LABEL1: stop

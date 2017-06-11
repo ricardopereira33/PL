@@ -1,0 +1,55 @@
+	pushi 0
+	pushn 3
+jump inic
+ler: nop
+	pushs "Introduza uma sequencia de numeros: "
+	writes
+	pushi 0
+	storeg 0
+LABEL0: 	pushg 0
+	pushi 3
+	inf
+
+	jz LABEL1
+	pushgp
+	pushi 1
+	padd
+	pushg 0
+	read
+	atoi
+	storen
+	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL0
+LABEL1: 	return
+start
+inic: 	pusha ler
+	call
+	nop
+	pushs "Array por ordem inversa: "
+	writes
+	pushg 0
+	pushi 1
+	sub
+	storeg 0
+LABEL2: 	pushg 0
+	pushi 0
+	supeq
+
+	jz LABEL3
+	pushgp
+	pushi 1
+	padd
+	pushg 0
+	loadn
+	writei
+	pushs " "
+	writes
+	pushg 0
+	pushi 1
+	sub
+	storeg 0
+	jump LABEL2
+LABEL3: stop

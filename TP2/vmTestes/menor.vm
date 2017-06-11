@@ -1,0 +1,45 @@
+	pushi 0
+	pushi 0
+	pushi 0
+	pushi 0
+jump inic
+start
+inic: 	pushs "Introduza um numero: "
+	writes
+	read
+	atoi
+	storeg 0
+	pushi 0
+	storeg 1
+	pushi 0
+	storeg 2
+LABEL1: 	pushg 1
+	pushg 0
+	inf
+
+	jz LABEL2
+	read
+	atoi
+	storeg 3
+	pushg 3
+	pushg 2
+	inf
+	pushg 1
+	pushi 0
+	equal
+	add
+	pushi 0
+	sup
+	jz LABEL0
+	pushg 3
+	storeg 2
+LABEL0: 	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL1
+LABEL2: 	pushs "O minimo e: "
+	writes
+	pushg 2
+	writei
+stop

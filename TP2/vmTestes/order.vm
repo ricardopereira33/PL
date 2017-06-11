@@ -1,0 +1,114 @@
+	pushi 0
+	pushi 0
+	pushi 0
+	pushn 3
+	pushn 3
+	pushi 0
+	pushi 0
+jump inic
+maximo: nop
+	pushi 0
+	storeg 1
+	pushi 0
+	storeg 9
+LABEL1: 	pushg 1
+	pushi 3
+	inf
+
+	jz LABEL2
+	pushgp
+	pushi 3
+	padd
+	pushg 1
+	loadn
+	pushg 9
+	sup
+	jz LABEL0
+	pushg 1
+	storeg 10
+	pushgp
+	pushi 3
+	padd
+	pushg 1
+	loadn
+	storeg 9
+LABEL0: 	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL1
+LABEL2: 	pushgp
+	pushi 6
+	padd
+	pushg 0
+	pushg 9
+	storen
+	pushgp
+	pushi 3
+	padd
+	pushg 10
+	pushi 0
+	storen
+	return
+start
+inic: 	pushs "Introduza uma sequencia de numeros: "
+	writes
+	pushi 0
+	storeg 1
+LABEL3: 	pushg 1
+	pushi 3
+	inf
+
+	jz LABEL4
+	read
+	atoi
+	storeg 2
+	pushgp
+	pushi 3
+	padd
+	pushg 1
+	pushg 2
+	storen
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL3
+LABEL4: 	pushi 0
+	storeg 0
+LABEL5: 	pushg 0
+	pushi 3
+	inf
+
+	jz LABEL6
+	pusha maximo
+	call
+	nop
+	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL5
+LABEL6: 	pushi 0
+	storeg 0
+	pushs "Array por ordem decrescente: "
+	writes
+LABEL7: 	pushg 0
+	pushi 3
+	inf
+
+	jz LABEL8
+	pushgp
+	pushi 6
+	padd
+	pushg 0
+	loadn
+	writei
+	pushs " "
+	writes
+	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL7
+LABEL8: stop

@@ -10,8 +10,6 @@ void addArray(char* var, int l, int c);
 int getArray(char* var);
 int getColuns(char* var);
 
-
-
 int labelInfo;
 
 typedef struct Array{
@@ -41,8 +39,8 @@ typedef struct VarInfo{
 %type <varinfo> var 
 %%
 
-siplp: ints funcs START insts END   { printf("%sjump inic\n%sstart\ninic: %sstop\n",$1,$2,$4); } /*esqueleto do codigo assembley*/
-     ;
+iLP: ints funcs START insts END   { printf("%sjump inic\n%sstart\ninic: %sstop\n",$1,$2,$4); } /*esqueleto do codigo assembley*/
+   ;
 
 ints: Int intIDs ';'               { $$ = $2; }
     ;
@@ -51,10 +49,14 @@ intIDs: intID                      { $$ = $1; }
       | intIDs ',' intID           { asprintf(&$$, "%s%s",$1,$3); }
       ;
 
-intID: ID                         { asprintf(&$$, "\tpushi 0\n"); } /*empilha o valor 0 a stack*/
-     | ID '=' NUM                 { asprintf(&$$, "\tpushi %d\n", $3); } /*empilha o valor NUM a stack*/
-     | ID '[' NUM ']'             { asprintf(&$$, "\tpushn %d\n", $3); } /*empilha NUM vezes o valor 0 a stack*/
-     | ID '[' NUM ']' '[' NUM ']' { asprintf(&$$, "\tpushn %d\n", $3 * $6); } /*empilha NUM*NUM vezes o valor 0 a stack*/
+intID: ID                         { asprintf(&$$, "\tpushi 0\n"); 
+                                    addVar($1); } /*empilha o valor 0 a stack*/
+     | ID '=' NUM                 { asprintf(&$$, "\tpushi %d\n", $3); 
+                                    addVar($1); } /*empilha o valor NUM a stack*/
+     | ID '[' NUM ']'             { asprintf(&$$, "\tpushn %d\n", $3); 
+                                    addArray($1, $3, 0); } /*empilha NUM vezes o valor 0 a stack*/
+     | ID '[' NUM ']' '[' NUM ']' { asprintf(&$$, "\tpushn %d\n", $3 * $6); 
+                                    addArray($1, $3, $6); } /*empilha NUM*NUM vezes o valor 0 a stack*/
 	 ;
 
 funcs: func                         { $$ = $1; }
@@ -62,20 +64,20 @@ funcs: func                         { $$ = $1; }
      |                              { $$ = ""; }
      ;
 
-func: F STR '{' insts '}'           { asprintf(&$$, "%s: nop\n%s\treturn",$2,$4); }
+func: F STR '{' insts '}'           { asprintf(&$$, "%s: nop\n%s\treturn\n",$2,$4); }
     ;
 
 insts: inst                         { $$ = $1; }
      | insts inst                   { asprintf(&$$, "%s%s", $1, $2); }
 	   ;
 
-inst: iWrite '(' factor ')' ';'                                    { asprintf(&$$, "%s\nwritei\n", $3); } /*retira um inteiro da pilha e impirme*/
+inst: iWrite '(' factor ')' ';'                                    { asprintf(&$$, "%s\twritei\n", $3); } /*retira um inteiro da pilha e impirme*/
     | iWrite '(' '"' STR '"' ')'';'                                { asprintf(&$$, "\tpushs \"%s\"\n\twrites\n", $4); } /*retira um endereço de uma string da pilha e impirme*/
-    | iRead '(' var ')' ';'                                        { asprintf(&$$, "%s\tread\n\tatoi\n\t%s",$3.push,$3.store); } 
+    | iRead '(' var ')' ';'                                        { asprintf(&$$, "%s\tread\n\tatoi\n%s",$3.push,$3.store); } 
     | var '=' expr ';'                                             { asprintf(&$$, "%s%s%s", $1.push, $3, $1.store); } /*passar o valor para a variavel VAR*/
-    | '?''('expr')' '{' insts '}'                                  { asprintf(&$$, "%s\tjz LABEL.%d\n%sLABEL.%d: ", $3, labelInfo, $6, labelInfo); labelInfo++; } /*IF*/
-    | '?''('expr')''{' insts '}''!''?''{' insts '}' /* IF ELSE */  { asprintf(&$$, "%s\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: %sLABEL.%d: ", $3, labelInfo, $6, labelInfo+1, labelInfo, $11, labelInfo+1); labelInfo+=2; } /*IF ELSE*/
-    | iLoop '('expr')' '{' insts '}' /* WHILE */                   { asprintf(&$$, "LABEL.%d: %s\n\tjz LABEL.%d\n%sjump LABEL.%d\nLABEL.%d: ", labelInfo, $3, labelInfo+1, $6, labelInfo , labelInfo+1); labelInfo+=2; } /*WHILE*/
+    | '?''('expr')' '{' insts '}'                                  { asprintf(&$$, "%s\tjz LABEL%d\n%sLABEL%d: ", $3, labelInfo, $6, labelInfo); labelInfo++; } /*IF*/
+    | '?''('expr')''{' insts '}''!''?''{' insts '}' /* IF ELSE */  { asprintf(&$$, "%s\tjz LABEL%d\n%s\tjump LABEL%d\nLABEL%d: %sLABEL%d: ", $3, labelInfo, $6, labelInfo+1, labelInfo, $11, labelInfo+1); labelInfo+=2; } /*IF ELSE*/
+    | iLoop '('expr')' '{' insts '}' /* WHILE */                   { asprintf(&$$, "LABEL%d: %s\n\tjz LABEL%d\n%s\tjump LABEL%d\nLABEL%d: ", labelInfo, $3, labelInfo+1, $6, labelInfo , labelInfo+1); labelInfo+=2; } /*WHILE*/
     | exe STR ';'                                                  { asprintf(&$$, "\tpusha %s\n\tcall\n\tnop\n", $2); }
     |                                                              { $$ = ""; }
     ;
