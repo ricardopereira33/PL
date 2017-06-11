@@ -1,0 +1,169 @@
+	pushi 0
+	pushi 0
+	pushi 0
+	pushi 0
+	pushn 4
+	pushn 4
+	pushn 4
+jump inic
+input: nop
+	pushi 0
+	storeg 0
+	pushi 2
+	storeg 2
+	pushi 2
+	storeg 3
+LABEL2: 	pushg 0
+	pushg 2
+	inf
+
+	jz LABEL3
+	pushi 0
+	storeg 1
+LABEL0: 	pushg 1
+	pushg 3
+	inf
+
+	jz LABEL1
+	pushgp
+	pushi 4
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	read
+	atoi
+	storen
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL0
+LABEL1: 	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL2
+LABEL3: 	pushi 0
+	storeg 0
+LABEL6: 	pushg 0
+	pushg 2
+	inf
+
+	jz LABEL7
+	pushi 0
+	storeg 1
+LABEL4: 	pushg 1
+	pushg 3
+	inf
+
+	jz LABEL5
+	pushgp
+	pushi 8
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	read
+	atoi
+	storen
+	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL4
+LABEL5: 	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL6
+LABEL7: 	return
+start
+inic: 	pushs "Introduza uma sequencia de numeros para as duas matrizes (2x2): "
+	writes
+	pusha input
+	call
+	nop
+	pushi 0
+	storeg 0
+	pushs " A matriz resultante é: \n"
+	writes
+LABEL11: 	pushg 0
+	pushg 2
+	inf
+
+	jz LABEL12
+	pushs "[ "
+	writes
+	pushi 0
+	storeg 1
+LABEL9: 	pushg 1
+	pushg 3
+	inf
+
+	jz LABEL10
+	pushgp
+	pushi 12
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	pushgp
+	pushi 4
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	loadn
+	pushgp
+	pushi 8
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	loadn
+	add
+	storen
+	pushgp
+	pushi 12
+	padd
+	pushg 0
+	pushi 2
+	mul
+	pushg 1
+	add
+	loadn
+	writei
+	pushg 1
+	pushg 3
+	pushi 1
+	sub
+	equal
+pushi 1
+inf
+	jz LABEL8
+	pushs " , "
+	writes
+LABEL8: 	pushg 1
+	pushi 1
+	add
+	storeg 1
+	jump LABEL9
+LABEL10: 	pushs " ]\n"
+	writes
+	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump LABEL11
+LABEL12: stop
