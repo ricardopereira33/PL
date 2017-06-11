@@ -7,8 +7,8 @@ START
 	iRead(lc);
 	iRead(ld);
 	?((la == lb) & (lb == lc) & (lc == ld)){
-		iWrite("Os lados introduzidos formem um quadrado.");
+		iWrite("Os lados introduzidos formam um quadrado.");
 	}!?{
-		iWrite("Os lados introduzidos nao formem um quadrado.");
+		iWrite("Os lados introduzidos nao formam um quadrado.");
 	}
 END
