@@ -1,61 +1,72 @@
 %option noyywrap yylineno
 %x INT INSTRUCTIONS READ WRITE INSTR ARRAYS EXEC EXP CONDITION FUNC
 
+/*simbolos das operacoes aritemticas nas condicoes*/
+CONDS [-+*/%()=><!&|\[\]] 
+/*simbolos das operacoes aritemticas nas expressoes*/
+EXPS [-+*/%()=\[\]]
+/*Letras*/
+L [a-zA-Z]+
+/*Numeros*/
+N [0-9]+
+/*Carateres para ignorar*/
+INV [ \t\n]*
+
 %%
 Int 					{ BEGIN INT; return Int; }
-<INT>[a-zA-Z]+ 			{ yylval.id = strdup(yytext); return ID; }
-<INT>[0-9]+ 			{ yylval.num = atoi(yytext); return NUM; }
-<INT>[,=\[\]] 			{ return yytext[0]; } /*tokens que estao no meio da declaracao de variaveis*/
+<INT>{L} 				{ yylval.id = strdup(yytext); return ID; }
+<INT>{N}				{ yylval.num = atoi(yytext); return NUM; }
+<INT>[,=\[\]] 			{ return yytext[0]; } 						/*tokens que estao no meio da declaracao de variaveis*/
 <INT>;			  		{ BEGIN INITIAL; return yytext[0]; }
-<INT>[ \n\t]* 			{ }
+<INT>{INV}				{ }
 
 F			  			{ BEGIN FUNC; return F; }
-<FUNC>[a-zA-Z]+   		{ yylval.id = strdup(yytext); return STR;}
+<FUNC>{L}  				{ yylval.id = strdup(yytext); return STR;}
 <FUNC>\{		  		{ BEGIN INSTRUCTIONS; return yytext[0]; }
 	
 START			  		{ BEGIN INSTRUCTIONS; return START; }
 <INSTRUCTIONS>START     { return START; }
 <INSTRUCTIONS>END 		{ BEGIN INITIAL; return END; }
-<INSTRUCTIONS>[ \t\n]   { }
+<INSTRUCTIONS>{INV}  	{ }
 
 <INSTRUCTIONS>iWrite 	{ BEGIN WRITE; return iWrite; }
 <WRITE>[()\[\]]			{ return yytext[0]; }
-<WRITE>[a-zA-Z]+	    { yylval.id = strdup(yytext); return ID; }
-<WRITE>[0-9]+			{ yylval.num = atoi(yytext); return NUM; }
-<WRITE>["]				{ BEGIN INSTR; return yytext[0]; } /* string para ser imprimida no comando write (entre "")*/
+<WRITE>{L}	    		{ yylval.id = strdup(yytext); return ID; }
+<WRITE>{N}			    { yylval.num = atoi(yytext); return NUM; }
+<WRITE>["]				{ BEGIN INSTR; return yytext[0]; } 			/* string para ser imprimida no comando write (entre "")*/
 <INSTR>[^"]+			{ yylval.id = strdup(yytext); return STR; }
 <INSTR>["]				{ BEGIN WRITE; return yytext[0]; }
 <WRITE>;				{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
 <INSTRUCTIONS>iRead  	{ BEGIN READ; return iRead; }
 <READ>[()\[\]]			{ return yytext[0]; }
-<READ>[a-zA-Z]+			{ yylval.id = strdup(yytext); return ID; }
-<READ>[0-9]+			{ yylval.num = atoi(yytext); return NUM; }
+<READ>{L}				{ yylval.id = strdup(yytext); return ID; }
+<READ>{N}				{ yylval.num = atoi(yytext); return NUM; }
 <READ>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
 <READ>[\t ]*			{ }
 
 <INSTRUCTIONS>exe  		{ BEGIN EXEC; return exe; }
-<EXEC>[a-zA-z]+			{ yylval.id = strdup(yytext); return STR; }
+<EXEC>{L}				{ yylval.id = strdup(yytext); return STR; }
 <EXEC>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
-<EXEC>[ \t\n]*			{ }
+<EXEC>{INV}				{ }
 
-<INSTRUCTIONS>iLoop				{ BEGIN CONDITION; return iLoop; } 
-<INSTRUCTIONS>\?				{ BEGIN CONDITION; return yytext[0]; } 
-<CONDITION>[-+*/%()=><!&|\[\]]	{ return yytext[0]; }
-<CONDITION>[0-9]+ 				{ yylval.num = atoi(yytext); return NUM; }
-<CONDITION>[a-zA-Z]+			{ yylval.id = strdup(yytext); return ID; }
-<CONDITION>\{					{ BEGIN INSTRUCTIONS; return yytext[0]; }
-<CONDITION>[ \t\n]				{ }
+<INSTRUCTIONS>iLoop		{ BEGIN CONDITION; return iLoop; } 
+<INSTRUCTIONS>\?		{ BEGIN CONDITION; return yytext[0]; } 
+<CONDITION>{CONDS}		{ return yytext[0]; }
+<CONDITION>{N} 			{ yylval.num = atoi(yytext); return NUM; }
+<CONDITION>{L}			{ yylval.id = strdup(yytext); return ID; }
+<CONDITION>\{			{ BEGIN INSTRUCTIONS; return yytext[0]; }
+<CONDITION>{INV}		{ }
 
-<INSTRUCTIONS>[a-zA-Z]+ { BEGIN EXP; yylval.id = strdup(yytext); return ID; }
-<EXP>[-+*/%()=\[\]]    	{ return yytext[0]; }
-<EXP>[0-9]+            	{ yylval.num = atoi(yytext); return NUM; }
-<EXP>[A-Za-z]+         	{ yylval.id = strdup(yytext); return ID; }
+<INSTRUCTIONS>{L} 		{ BEGIN EXP; yylval.id = strdup(yytext); return ID; }
+<EXP>{EXPS}    			{ return yytext[0]; }
+<EXP>{N}            	{ yylval.num = atoi(yytext); return NUM; }
+<EXP>{L}        		{ yylval.id = strdup(yytext); return ID; }
 <EXP>;					{ BEGIN INSTRUCTIONS; return yytext[0]; }
 
 <INSTRUCTIONS>[!?{}] 	{ return yytext[0]; }
 
 <*>$.*					{ }
-<*>[ \t\n]* 			{ }
+<*>{INV}				{ }
 
 %%
