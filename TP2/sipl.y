@@ -185,7 +185,8 @@ void addArray(char* var, int l, int c){
         a->l = l;
         a->c = c;
         g_hash_table_insert(arrays, var, a);
-        globalPointer += l*c;
+        if(c!=0) globalPointer += l*c;
+        else globalPointer += l;
     }
     else if(l < 1){
         asprintf(&error, "Tamanho atribuido ao array (%s) inválido.[TamanhoMin >= 1]", var);
