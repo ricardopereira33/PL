@@ -33,6 +33,7 @@ START			  		{ BEGIN INSTRUCTIONS; return START; }
 <WRITE>[()\[\]]			{ return yytext[0]; }
 <WRITE>{L}	    		{ yylval.id = strdup(yytext); return ID; }
 <WRITE>{N}			    { yylval.num = atoi(yytext); return NUM; }
+<WRITE>{EXPS}			{ return yytext[0]; }
 <WRITE>["]				{ BEGIN INSTR; return yytext[0]; } 			/* string para ser imprimida no comando write (entre "")*/
 <INSTR>[^"]+			{ yylval.id = strdup(yytext); return STR; }
 <INSTR>["]				{ BEGIN WRITE; return yytext[0]; }

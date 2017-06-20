@@ -74,7 +74,7 @@ void insertVerb(char* yytext, int index ){
 	char* token = strtok(yytext," ?");
 	while(token!=NULL){
 		token = strtok(NULL," ?");
-		if(token!=NULL && i<index)strcpy(value,token);
+		if(token!=NULL && i<index) strcpy(value,token);
 		else break;
 		i++;
 	}
